@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌱 GayaCode Analysis - balanced-script.js</title>
+    <title>🌱 GayaCode Analysis - test-script.js</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
@@ -33,6 +33,47 @@
         border: 1px solid rgba(148, 163, 184, 0.2);
         overflow: hidden;
       }
+
+      .footer {
+        background: rgba(15, 23, 42, 0.8);
+        padding: 24px 40px;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.9rem;
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .footer p {
+        margin-bottom: 4px;
+      }
+
+      .footer strong {
+        color: #22c55e;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          border-radius: 16px;
+        }
+
+        .forest-container, .radar-container {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .flow-legend {
+          position: relative;
+          top: auto;
+          right: auto;
+          margin-top: 16px;
+        }
+
+        .forest-stats, .radar-insights {
+          order: -1;
+        }
+      }
+    
 
       .header {
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
@@ -147,6 +188,7 @@
         font-weight: 500;
         opacity: 0.7;
       }
+    
 
       .quick-stats {
         display: grid;
@@ -221,21 +263,49 @@
         font-size: 0.85rem;
         color: #cbd5e1;
       }
+    
 
-      .charts-section, .carbon-flow-section, .forest-section, .radar-section, .equivalences-section, .scaling-section, .breakdown-section {
+      .charts-section {
         padding: 40px;
         background: rgba(15, 23, 42, 0.3);
         border-top: 1px solid rgba(148, 163, 184, 0.2);
       }
 
-      .charts-section h3, .carbon-flow-section h3, .forest-section h3, .radar-section h3, .equivalences-section h3, .scaling-section h3 {
+      .charts-section h3 {
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 24px;
         color: #f1f5f9;
       }
 
-      /* Carbon Flow Visualization Styles */
+      .chart-container {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .chart-wrapper {
+        height: 400px;
+        position: relative;
+      }
+    
+
+      .carbon-flow-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .carbon-flow-section h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #f1f5f9;
+      }
+
       .carbon-flow-container {
         background: rgba(30, 41, 59, 0.8);
         border-radius: 16px;
@@ -289,8 +359,21 @@
         font-weight: 600;
         color: #22c55e;
       }
+    
 
-      /* Virtual Forest Styles */
+      .forest-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .forest-section h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #f1f5f9;
+      }
+
       .forest-container {
         display: grid;
         grid-template-columns: 2fr 1fr;
@@ -368,23 +451,19 @@
         font-size: 0.8rem;
         color: #cbd5e1;
       }
+    
 
-      /* Power Radar Styles */
+      .radar-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
       .radar-container {
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 30px;
         align-items: start;
-      }
-
-      .radar-container > canvas {
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        backdrop-filter: blur(10px);
-        height: 350px;
       }
 
       .radar-insights {
@@ -404,202 +483,19 @@
         border: 1px solid rgba(148, 163, 184, 0.2);
         transition: all 0.3s ease;
       }
+    
 
-      .insight-card:hover {
-        transform: translateY(-2px);
-        border-color: rgba(59, 130, 246, 0.5);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      .equivalences-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
       }
 
-      .insight-icon {
-        font-size: 2rem;
-        width: 50px;
-        text-align: center;
-      }
-
-      .insight-content h4 {
-        font-size: 1rem;
-        color: #f1f5f9;
-        margin-bottom: 8px;
+      .equivalences-section h3 {
+        font-size: 1.5rem;
         font-weight: 600;
-      }
-
-      .insight-value {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: #3b82f6;
-        margin-bottom: 4px;
-      }
-
-      .insight-description {
-        font-size: 0.8rem;
-        color: #cbd5e1;
-        margin: 0;
-      }
-
-      .chart-container {
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        backdrop-filter: blur(10px);
-      }
-
-      .chart-wrapper {
-        height: 400px;
-        position: relative;
-      }
-
-
-
-
-
-      .world-map-container {
-        width: 100%;
-        height: 100%;
-        min-height: 400px;
-        border-radius: 12px;
-        overflow: hidden;
-      }
-
-      /* Leaflet map styling overrides */
-      .leaflet-container {
-        background: rgba(15, 23, 42, 0.8) !important;
-        font-family: 'Inter', sans-serif !important;
-      }
-
-      .leaflet-popup-content-wrapper {
-        background: rgba(15, 23, 42, 0.95) !important;
-        color: #f1f5f9 !important;
-        border-radius: 8px !important;
-        border: 1px solid rgba(34, 197, 94, 0.3) !important;
-        backdrop-filter: blur(10px);
-      }
-
-      .leaflet-popup-tip {
-        background: rgba(15, 23, 42, 0.95) !important;
-        border: 1px solid rgba(34, 197, 94, 0.3) !important;
-      }
-
-      .map-info-tooltip {
-        position: fixed !important;
-        top: 20px !important;
-        right: 20px !important;
-        z-index: 1000 !important;
-        pointer-events: none !important;
-      }
-
-      .map-legend {
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(148, 163, 184, 0.2);
-        backdrop-filter: blur(10px);
-      }
-
-      .legend-title {
+        margin-bottom: 24px;
         color: #f1f5f9;
-        font-weight: 600;
-        margin-bottom: 16px;
-        font-size: 1rem;
-      }
-
-      .legend-items {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 0.9rem;
-        color: #cbd5e1;
-      }
-
-      .legend-color {
-        width: 20px;
-        height: 20px;
-        border-radius: 4px;
-        border: 1px solid rgba(148, 163, 184, 0.3);
-      }
-
-      .legend-color.clean { background: #22c55e; }
-      .legend-color.low { background: #eab308; }
-      .legend-color.medium { background: #f97316; }
-      .legend-color.high { background: #dc2626; }
-
-      .country {
-        cursor: pointer;
-        transition: all 0.2s ease;
-        stroke: rgba(148, 163, 184, 0.3);
-        stroke-width: 0.5;
-      }
-
-      .country:hover {
-        stroke: #22c55e;
-        stroke-width: 2;
-        filter: brightness(1.2);
-        transform-origin: center;
-        animation: pulse-country 0.3s ease;
-      }
-
-      .other-region {
-        stroke: rgba(148, 163, 184, 0.2);
-        stroke-width: 0.5;
-        transition: all 0.2s ease;
-      }
-
-      .other-region:hover {
-        fill: rgba(100, 116, 139, 0.5);
-      }
-
-      @keyframes pulse-country {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.02); }
-        100% { transform: scale(1); }
-      }
-
-      .tooltip {
-        position: absolute;
-        background: rgba(15, 23, 42, 0.95);
-        color: #f1f5f9;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        pointer-events: none;
-        z-index: 1000;
-        border: 1px solid rgba(34, 197, 94, 0.3);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-        opacity: 0;
-        transform: translateY(10px);
-        transition: all 0.2s ease;
-      }
-
-      .tooltip.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .tooltip-country {
-        font-weight: 600;
-        margin-bottom: 4px;
-        color: #22c55e;
-      }
-
-      .tooltip-value {
-        font-size: 1.1rem;
-        font-weight: 700;
-      }
-
-      .tooltip-description {
-        font-size: 0.8rem;
-        opacity: 0.8;
-        margin-top: 4px;
       }
 
       .equivalences-grid {
@@ -608,21 +504,33 @@
         gap: 30px;
       }
 
+      .equivalence-category {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
       .equivalence-category h4 {
         font-size: 1.2rem;
         font-weight: 600;
         margin-bottom: 20px;
         color: #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .equivalence-items {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
       }
 
       .equivalence-item {
-        background: rgba(30, 41, 59, 0.6);
+        background: rgba(15, 23, 42, 0.6);
         border-radius: 12px;
         padding: 16px;
         display: flex;
@@ -633,9 +541,10 @@
       }
 
       .equivalence-item:hover {
-        background: rgba(30, 41, 59, 0.8);
-        transform: translateX(4px);
-        border-color: rgba(34, 197, 94, 0.4);
+        transform: translateY(-2px);
+        background: rgba(15, 23, 42, 0.8);
+        border-color: rgba(34, 197, 94, 0.5);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
       }
 
       .equivalence-icon {
@@ -649,15 +558,22 @@
       }
 
       .equivalence-value {
-        font-size: 1.1rem;
-        font-weight: 600;
+        font-size: 1.2rem;
+        font-weight: 700;
         color: #f1f5f9;
+        margin-bottom: 2px;
       }
 
       .equivalence-unit {
         font-size: 0.9rem;
-        color: #cbd5e1;
-        margin-top: 2px;
+        color: #94a3b8;
+      }
+    
+
+      .scaling-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
       }
 
       .scaling-grid {
@@ -675,51 +591,12 @@
         transition: all 0.3s ease;
         backdrop-filter: blur(10px);
       }
+    
 
-      .scaling-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        border-color: rgba(34, 197, 94, 0.5);
-      }
-
-      .scaling-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
-      }
-
-      .scaling-icon {
-        font-size: 1.5rem;
-      }
-
-      .scaling-header h4 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #f1f5f9;
-      }
-
-      .scaling-metrics {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .scaling-metric {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .metric-label {
-        font-size: 0.9rem;
-        color: #94a3b8;
-      }
-
-      .metric-value {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #f1f5f9;
+      .breakdown-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
       }
 
       .breakdown-grid {
@@ -737,13 +614,6 @@
         backdrop-filter: blur(10px);
       }
 
-      .breakdown-card h3 {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 20px;
-        color: #f1f5f9;
-      }
-
       .score-breakdown {
         display: flex;
         flex-direction: column;
@@ -755,15 +625,6 @@
         grid-template-columns: 1fr 2fr auto;
         align-items: center;
         gap: 12px;
-      }
-
-      .score-item span:first-child {
-        color: #cbd5e1;
-      }
-
-      .score-item span:last-child {
-        color: #f1f5f9;
-        font-weight: 600;
       }
 
       .score-bar {
@@ -779,271 +640,180 @@
         border-radius: 4px;
         transition: width 1s ease;
       }
-
-      .details-list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .detail-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-      }
-
-      .detail-item:last-child {
-        border-bottom: none;
-      }
-
-      .detail-item span:first-child {
-        font-weight: 500;
-        color: #94a3b8;
-      }
-
-      .detail-item span:last-child {
-        font-weight: 600;
-        color: #f1f5f9;
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-size: 0.85rem;
-      }
-
-      .footer {
-        background: rgba(15, 23, 42, 0.8);
-        padding: 24px 40px;
-        text-align: center;
-        color: #94a3b8;
-        font-size: 0.9rem;
-        border-top: 1px solid rgba(148, 163, 184, 0.2);
-      }
-
-      .footer p {
-        margin-bottom: 4px;
-      }
-
-      .footer strong {
-        color: #22c55e;
-      }
-
-      @media (max-width: 768px) {
-        .container {
-          margin: 10px;
-          border-radius: 16px;
-        }
-
-        .header {
-          padding: 24px;
-        }
-
-        .header-content {
-          flex-direction: column;
-          text-align: center;
-        }
-
-        .logo-text h1 {
-          font-size: 2rem;
-        }
-
-        .quick-stats, .charts-section, .equivalences-section, .scaling-section, .breakdown-section {
-          padding: 24px;
-        }
-
-        .equivalences-grid, .breakdown-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .forest-container, .radar-container {
-          grid-template-columns: 1fr;
-          gap: 20px;
-        }
-
-        .flow-legend {
-          position: relative;
-          top: auto;
-          right: auto;
-          margin-top: 16px;
-        }
-
-        .forest-stats, .radar-insights {
-          order: -1;
-        }
-      }
     
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">🌱</div>
-                    <div class="logo-text">
-                        <h1>GayaCode Analysis</h1>
-                        <p>Environmental Impact Report</p>
-                    </div>
-                </div>
-                <div class="header-meta">
-                    <div class="script-info">
-                        <h2>balanced-script.js</h2>
-                        <p>Analyzed on 9/19/2025, 5:18:22 PM</p>
-                    </div>
-                    <div class="eco-score-badge">
-                        <div class="score-circle" style="background: conic-gradient(#ca8a04 67.46775405692425%, #e5e7eb 67.46775405692425%);">
-                            <div class="score-inner">
-                                <span class="score-value">67</span>
-                                <span class="score-grade">C</span>
-                            </div>
-                        </div>
-                        <p>Eco Score</p>
-                    </div>
-                </div>
+        
+      <header class="header">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">🌱</div>
+            <div class="logo-text">
+              <h1>GayaCode Analysis</h1>
+              <p>Environmental Impact Report</p>
             </div>
-        </header>
+          </div>
+          <div class="header-meta">
+            <div class="script-info">
+              <h2>test-script.js</h2>
+              <p>Analyzed on 9/19/2025, 6:08:10 PM</p>
+            </div>
+            <div class="eco-score-badge">
+              <div class="score-circle" style="background: conic-gradient(#ca8a04 60.875%, #e5e7eb 60.875%);">
+                <div class="score-inner">
+                  <span class="score-value">61</span>
+                  <span class="score-grade">B</span>
+                </div>
+              </div>
+              <p>Eco Score</p>
+            </div>
+          </div>
+        </div>
+      </header>
+    
 
-        <!-- Quick Stats -->
-        <section class="quick-stats">
-            <div class="stat-card energy">
-                <div class="stat-icon">⚡</div>
-                <div class="stat-content">
-                    <h3>Energy Consumed</h3>
-                    <p class="stat-value">685.10 nWh</p>
-                    <p class="stat-change">Peak: 175.0% CPU</p>
-                </div>
-            </div>
-            <div class="stat-card co2">
-                <div class="stat-icon">🌍</div>
-                <div class="stat-content">
-                    <h3>CO₂ Emissions</h3>
-                    <p class="stat-value">274.04 µg</p>
-                    <p class="stat-change">Factor: 400g/kWh</p>
-                </div>
-            </div>
-            <div class="stat-card time">
-                <div class="stat-icon">⏱️</div>
-                <div class="stat-content">
-                    <h3>Execution Time</h3>
-                    <p class="stat-value">306ms</p>
-                    <p class="stat-change">5 samples</p>
-                </div>
-            </div>
-            <div class="stat-card memory">
-                <div class="stat-icon">💾</div>
-                <div class="stat-content">
-                    <h3>Peak Memory</h3>
-                    <p class="stat-value">139.7MB</p>
-                    <p class="stat-change">Avg: 118.2MB</p>
-                </div>
-            </div>
-        </section>
+      <section class="quick-stats">
+        <div class="stat-card energy">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-content">
+            <h3>Energy Consumed</h3>
+            <p class="stat-value">590.28 nWh</p>
+            <p class="stat-change">Peak: 160.0% CPU</p>
+          </div>
+        </div>
+        <div class="stat-card co2">
+          <div class="stat-icon">🌍</div>
+          <div class="stat-content">
+            <h3>CO₂ Emissions</h3>
+            <p class="stat-value">236.11 µg</p>
+            <p class="stat-change">Factor: 400g/kWh</p>
+          </div>
+        </div>
+        <div class="stat-card time">
+          <div class="stat-icon">⏱️</div>
+          <div class="stat-content">
+            <h3>Execution Time</h3>
+            <p class="stat-value">1242ms</p>
+            <p class="stat-change">24 samples</p>
+          </div>
+        </div>
+        <div class="stat-card memory">
+          <div class="stat-icon">💾</div>
+          <div class="stat-content">
+            <h3>Peak Memory</h3>
+            <p class="stat-value">156.7MB</p>
+            <p class="stat-change">Avg: 149.0MB</p>
+          </div>
+        </div>
+      </section>
+    
 
-        <!-- Performance Charts -->
-        <section class="charts-section">
-            <div class="chart-container">
-                <h3>🔥 Performance Timeline</h3>
-                <div class="chart-wrapper">
-                    <canvas id="performanceChart"></canvas>
-                </div>
-            </div>
-        </section>
+      <section class="charts-section">
+        <div class="chart-container">
+          <h3>🔥 Performance Timeline</h3>
+          <div class="chart-wrapper">
+            <canvas id="performanceChart"></canvas>
+          </div>
+        </div>
+      </section>
+    
 
-        <!-- Live Carbon Flow Visualization -->
-        <section class="carbon-flow-section">
-            <h3>🌊 Live Carbon Flow Visualization</h3>
-            <div class="carbon-flow-container">
-                <canvas id="carbonFlowCanvas"></canvas>
-                <div class="flow-legend">
-                    <div class="flow-info">
-                        <div class="flow-metric">
-                            <span class="flow-label">Current Rate</span>
-                            <span class="flow-value" id="currentFlowRate">895.05 µg/s</span>
-                        </div>
-                        <div class="flow-metric">
-                            <span class="flow-label">Total Emitted</span>
-                            <span class="flow-value" id="totalEmitted">274.04 µg</span>
-                        </div>
-                    </div>
-                </div>
+      <section class="carbon-flow-section">
+        <h3>🌊 Live Carbon Flow Visualization</h3>
+        <div class="carbon-flow-container">
+          <canvas id="carbonFlowCanvas"></canvas>
+          <div class="flow-legend">
+            <div class="flow-info">
+              <div class="flow-metric">
+                <span class="flow-label">Current Rate</span>
+                <span class="flow-value" id="currentFlowRate">190.15 µg/s</span>
+              </div>
+              <div class="flow-metric">
+                <span class="flow-label">Total Emitted</span>
+                <span class="flow-value" id="totalEmitted">236.11 µg</span>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
+    
 
-        <!-- Virtual Forest Impact -->
-        <section class="forest-section">
-            <h3>🌲 Virtual Forest Impact</h3>
-            <div class="forest-container">
-                <div class="forest-visualization">
-                    <canvas id="forestCanvas"></canvas>
-                </div>
-                <div class="forest-stats">
-                    <div class="forest-metric">
-                        <div class="metric-icon">🌱</div>
-                        <div class="metric-content">
-                            <span class="metric-title">Trees Needed</span>
-                            <span class="metric-value">1</span>
-                            <span class="metric-subtitle">to offset CO₂</span>
-                        </div>
-                    </div>
-                    <div class="forest-metric">
-                        <div class="metric-icon">🕐</div>
-                        <div class="metric-content">
-                            <span class="metric-title">Absorption Time</span>
-                            <span class="metric-value">1 days</span>
-                            <span class="metric-subtitle">for full offset</span>
-                        </div>
-                    </div>
-                    <div class="forest-metric">
-                        <div class="metric-icon">🏞️</div>
-                        <div class="metric-content">
-                            <span class="metric-title">Forest Area</span>
-                            <span class="metric-value">0.0 m²</span>
-                            <span class="metric-subtitle">equivalent space</span>
-                        </div>
-                    </div>
-                </div>
+      <section class="forest-section">
+        <h3>🌲 Virtual Forest Impact</h3>
+        <div class="forest-container">
+          <div class="forest-visualization">
+            <canvas id="forestCanvas"></canvas>
+          </div>
+          <div class="forest-stats">
+            <div class="forest-metric">
+              <div class="metric-icon">🌱</div>
+              <div class="metric-content">
+                <span class="metric-title">Trees Needed</span>
+                <span class="metric-value">1</span>
+                <span class="metric-subtitle">to offset CO₂</span>
+              </div>
             </div>
-        </section>
-
-        <!-- Power Consumption Radar -->
-        <section class="radar-section">
-            <h3>⚡ Power Consumption Radar</h3>
-            <div class="radar-container">
-                <canvas id="powerRadarChart"></canvas>
-                <div class="radar-insights">
-                    <div class="insight-card">
-                        <div class="insight-icon">🎯</div>
-                        <div class="insight-content">
-                            <h4>Efficiency Score</h4>
-                            <p class="insight-value">67/100</p>
-                            <p class="insight-description">Overall performance rating</p>
-                        </div>
-                    </div>
-                    <div class="insight-card">
-                        <div class="insight-icon">⚡</div>
-                        <div class="insight-content">
-                            <h4>Peak Power</h4>
-                            <p class="insight-value">2.625W</p>
-                            <p class="insight-description">Maximum power draw</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="forest-metric">
+              <div class="metric-icon">🕐</div>
+              <div class="metric-content">
+                <span class="metric-title">Absorption Time</span>
+                <span class="metric-value">1 days</span>
+                <span class="metric-subtitle">for full offset</span>
+              </div>
             </div>
-        </section>
+            <div class="forest-metric">
+              <div class="metric-icon">🏞️</div>
+              <div class="metric-content">
+                <span class="metric-title">Forest Area</span>
+                <span class="metric-value">0.0 m²</span>
+                <span class="metric-subtitle">equivalent space</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
 
-        <!-- Environmental Equivalences -->
-        <section class="equivalences-section">
-            <h3>🌍 Real-World Impact</h3>
-            <div class="equivalences-grid">
-                <div class="equivalence-category">
-                    <h4>⚡ Energy Equivalents</h4>
-                    <div class="equivalence-items">
-                        
+      <section class="radar-section">
+        <h3>⚡ Power Consumption Radar</h3>
+        <div class="radar-container">
+          <canvas id="powerRadarChart"></canvas>
+          <div class="radar-insights">
+            <div class="insight-card">
+              <div class="insight-icon">🎯</div>
+              <div class="insight-content">
+                <h4>Efficiency Score</h4>
+                <p class="insight-value">61/100</p>
+                <p class="insight-description">Overall performance rating</p>
+              </div>
+            </div>
+            <div class="insight-card">
+              <div class="insight-icon">⚡</div>
+              <div class="insight-content">
+                <h4>Peak Power</h4>
+                <p class="insight-value">2.400W</p>
+                <p class="insight-description">Maximum power draw</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+
+      <section class="equivalences-section">
+        <h3>🌍 Real-World Impact</h3>
+        <div class="equivalences-grid">
+          <div class="equivalence-category">
+            <h4>⚡ Energy Equivalents</h4>
+            <div class="equivalence-items">
+              
       <div class="equivalence-item">
         <div class="equivalence-icon">📱</div>
         <div class="equivalence-content">
-          <div class="equivalence-value">0.0000</div>
-          <div class="equivalence-unit">phone charges</div>
+          <div class="equivalence-value">0.04</div>
+          <div class="equivalence-unit">smartphone charges</div>
         </div>
       </div>
     
@@ -1058,46 +828,30 @@
       <div class="equivalence-item">
         <div class="equivalence-icon">💻</div>
         <div class="equivalence-content">
-          <div class="equivalence-value">0.0006</div>
-          <div class="equivalence-unit">minutes of laptop use</div>
-        </div>
-      </div>
-    
-      <div class="equivalence-item">
-        <div class="equivalence-icon">☕</div>
-        <div class="equivalence-content">
           <div class="equivalence-value">0.0000</div>
-          <div class="equivalence-unit">cups of coffee brewed</div>
+          <div class="equivalence-unit">hours of laptop use</div>
         </div>
       </div>
     
-                    </div>
-                </div>
-                <div class="equivalence-category">
-                    <h4>🌱 Carbon Equivalents</h4>
-                    <div class="equivalence-items">
-                        
-      <div class="equivalence-item">
-        <div class="equivalence-icon">🚗</div>
-        <div class="equivalence-content">
-          <div class="equivalence-value">0.0023</div>
-          <div class="equivalence-unit">meters driven by car</div>
-        </div>
-      </div>
-    
+            </div>
+          </div>
+          <div class="equivalence-category">
+            <h4>🌱 Carbon Equivalents</h4>
+            <div class="equivalence-items">
+              
       <div class="equivalence-item">
         <div class="equivalence-icon">🌳</div>
         <div class="equivalence-content">
-          <div class="equivalence-value">0.39</div>
-          <div class="equivalence-unit">seconds of tree absorption</div>
+          <div class="equivalence-value">0.0000</div>
+          <div class="equivalence-unit">trees needed for 1 year</div>
         </div>
       </div>
     
       <div class="equivalence-item">
-        <div class="equivalence-icon">🫁</div>
+        <div class="equivalence-icon">🚗</div>
         <div class="equivalence-content">
-          <div class="equivalence-value">0.03</div>
-          <div class="equivalence-unit">minutes of human breathing</div>
+          <div class="equivalence-value">0.0000</div>
+          <div class="equivalence-unit">km driven by car</div>
         </div>
       </div>
     
@@ -1105,149 +859,129 @@
         <div class="equivalence-icon">✈️</div>
         <div class="equivalence-content">
           <div class="equivalence-value">0.0000</div>
-          <div class="equivalence-unit">seconds of commercial flight</div>
+          <div class="equivalence-unit">km flown</div>
         </div>
       </div>
     
-                    </div>
-                </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
+    
 
-        <!-- Scaling Projections -->
-        <section class="scaling-section">
-            <h3>📈 Scaling Impact</h3>
-            <div class="scaling-grid">
-                
-                    <div class="scaling-card">
-                        <div class="scaling-header">
-                            <span class="scaling-icon">📦</span>
-                            <h4>1K executions</h4>
-                        </div>
-                        <div class="scaling-metrics">
-                            <div class="scaling-metric">
-                                <span class="metric-label">Energy</span>
-                                <span class="metric-value">685.10 µWh</span>
-                            </div>
-                            <div class="scaling-metric">
-                                <span class="metric-label">CO₂</span>
-                                <span class="metric-value">274.04 mg</span>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="scaling-card">
-                        <div class="scaling-header">
-                            <span class="scaling-icon">🏭</span>
-                            <h4>10K executions</h4>
-                        </div>
-                        <div class="scaling-metrics">
-                            <div class="scaling-metric">
-                                <span class="metric-label">Energy</span>
-                                <span class="metric-value">6.85 mWh</span>
-                            </div>
-                            <div class="scaling-metric">
-                                <span class="metric-label">CO₂</span>
-                                <span class="metric-value">2.740 g</span>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="scaling-card">
-                        <div class="scaling-header">
-                            <span class="scaling-icon">🌆</span>
-                            <h4>100K executions</h4>
-                        </div>
-                        <div class="scaling-metrics">
-                            <div class="scaling-metric">
-                                <span class="metric-label">Energy</span>
-                                <span class="metric-value">68.51 mWh</span>
-                            </div>
-                            <div class="scaling-metric">
-                                <span class="metric-label">CO₂</span>
-                                <span class="metric-value">27.404 g</span>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="scaling-card">
-                        <div class="scaling-header">
-                            <span class="scaling-icon">🌍</span>
-                            <h4>1M executions</h4>
-                        </div>
-                        <div class="scaling-metrics">
-                            <div class="scaling-metric">
-                                <span class="metric-label">Energy</span>
-                                <span class="metric-value">685.10 mWh</span>
-                            </div>
-                            <div class="scaling-metric">
-                                <span class="metric-label">CO₂</span>
-                                <span class="metric-value">274.039 g</span>
-                            </div>
-                        </div>
-                    </div>
-                
-            </div>
-        </section>
-
-        <!-- Detailed Breakdown -->
-        <section class="breakdown-section">
-            <div class="breakdown-grid">
-                <div class="breakdown-card">
-                    <h3>🎯 Eco Score Breakdown</h3>
-                    <div class="score-breakdown">
-                        <div class="score-item">
-                            <span>Energy Efficiency</span>
-                            <div class="score-bar">
-                                <div class="score-fill" style="width: 93.14901401706061%"></div>
-                            </div>
-                            <span>93</span>
-                        </div>
-                        <div class="score-item">
-                            <span>Execution Speed</span>
-                            <div class="score-bar">
-                                <div class="score-fill" style="width: 99.693828167%"></div>
-                            </div>
-                            <span>100</span>
-                        </div>
-                        <div class="score-item">
-                            <span>CPU Efficiency</span>
-                            <div class="score-bar">
-                                <div class="score-fill" style="width: 1%"></div>
-                            </div>
-                            <span>1</span>
-                        </div>
-                    </div>
+      <section class="scaling-section">
+        <h3>📈 Scaling Impact</h3>
+        <div class="scaling-grid">
+          
+            <div class="scaling-card">
+              <div class="scaling-header">
+                <span class="scaling-icon">🔥</span>
+                <h4>1K Executions/Day</h4>
+              </div>
+              <div class="scaling-metrics">
+                <div class="scaling-metric">
+                  <span class="metric-label">Energy</span>
+                  <span class="metric-value">590.28 µWh</span>
                 </div>
-
-                <div class="breakdown-card">
-                    <h3>📊 Analysis Details</h3>
-                    <div class="details-list">
-                        <div class="detail-item">
-                            <span>Script Path</span>
-                            <span>/home/shalevo/projects/GayaCode/tests/balanced-script.js</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>Monitoring Interval</span>
-                            <span>50ms</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>CPU Power Coefficient</span>
-                            <span>0.00008 kW/%</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>Memory Power Coefficient</span>
-                            <span>3e-7 kW/MB</span>
-                        </div>
-                    </div>
+                <div class="scaling-metric">
+                  <span class="metric-label">CO₂</span>
+                  <span class="metric-value">0.236 g</span>
                 </div>
+              </div>
             </div>
-        </section>
+          
+            <div class="scaling-card">
+              <div class="scaling-header">
+                <span class="scaling-icon">⚡</span>
+                <h4>1M Executions/Month</h4>
+              </div>
+              <div class="scaling-metrics">
+                <div class="scaling-metric">
+                  <span class="metric-label">Energy</span>
+                  <span class="metric-value">590.28 mWh</span>
+                </div>
+                <div class="scaling-metric">
+                  <span class="metric-label">CO₂</span>
+                  <span class="metric-value">236.110 g</span>
+                </div>
+              </div>
+            </div>
+          
+            <div class="scaling-card">
+              <div class="scaling-header">
+                <span class="scaling-icon">🌍</span>
+                <h4>Global Scale (1B/Year)</h4>
+              </div>
+              <div class="scaling-metrics">
+                <div class="scaling-metric">
+                  <span class="metric-label">Energy</span>
+                  <span class="metric-value">590.28 kWh</span>
+                </div>
+                <div class="scaling-metric">
+                  <span class="metric-label">CO₂</span>
+                  <span class="metric-value">236.11 kg</span>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </section>
+    
 
+      <section class="breakdown-section">
+        <div class="breakdown-grid">
+          <div class="breakdown-card">
+            <h3>🎯 Eco Score Breakdown</h3>
+            <div class="score-breakdown">
+              <div class="score-item">
+                <span>Energy Efficiency</span>
+                <div class="score-bar">
+                  <div class="score-fill" style="width: 100%"></div>
+                </div>
+                <span>100</span>
+              </div>
+              <div class="score-item">
+                <span>Execution Speed</span>
+                <div class="score-bar">
+                  <div class="score-fill" style="width: 60%"></div>
+                </div>
+                <span>60</span>
+              </div>
+              <div class="score-item">
+                <span>CPU Efficiency</span>
+                <div class="score-bar">
+                  <div class="score-fill" style="width: 9.583333333333329%"></div>
+                </div>
+                <span>10</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="breakdown-card">
+            <h3>📊 Analysis Details</h3>
+            <div class="details-list">
+              <div class="detail-item">
+                <span>Emission Factor</span>
+                <span>400 g/kWh</span>
+              </div>
+              <div class="detail-item">
+                <span>Monitoring Interval</span>
+                <span>50ms</span>
+              </div>
+              <div class="detail-item">
+                <span>Analysis Time</span>
+                <span>1258ms</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+        
         <!-- Footer -->
         <footer class="footer">
             <p>Generated by <strong>🌱 GayaCode</strong> - Making code more sustainable, one script at a time.</p>
-            <p>Analysis completed in 306ms with 5 data points.</p>
+            <p>Analysis completed in 1241.68842ms with 24 data points.</p>
         </footer>
     </div>
 
@@ -1256,7 +990,7 @@
       // Performance Chart
       const ctx = document.getElementById('performanceChart').getContext('2d');
       
-      const chartData = [{"x":0.061153519,"cpu":0,"memory":88.0078125},{"x":0.10068928999999999,"cpu":175,"memory":110.58203125},{"x":0.15137440499999996,"cpu":120,"memory":121.83203125},{"x":0.202116429,"cpu":80,"memory":130.83203125},{"x":0.252956645,"cpu":120,"memory":139.74609375}];
+      const chartData = [{"x":0.05,"cpu":0,"memory":72.3515625},{"x":0.1,"cpu":160,"memory":92.53515625},{"x":0.15,"cpu":160,"memory":122.91015625},{"x":0.2,"cpu":120,"memory":155.53515625},{"x":0.251,"cpu":40,"memory":156.66015625},{"x":0.301,"cpu":0,"memory":156.66015625},{"x":0.351,"cpu":0,"memory":156.66015625},{"x":0.401,"cpu":0,"memory":156.66015625},{"x":0.451,"cpu":0,"memory":156.66015625},{"x":0.501,"cpu":0,"memory":156.66015625},{"x":0.551,"cpu":0,"memory":156.66015625},{"x":0.601,"cpu":0,"memory":156.66015625},{"x":0.651,"cpu":0,"memory":156.66015625},{"x":0.701,"cpu":0,"memory":156.66015625},{"x":0.751,"cpu":0,"memory":156.66015625},{"x":0.802,"cpu":0,"memory":156.66015625},{"x":0.852,"cpu":20,"memory":156.66015625},{"x":0.902,"cpu":0,"memory":156.66015625},{"x":0.952,"cpu":0,"memory":156.66015625},{"x":1.002,"cpu":0,"memory":156.66015625},{"x":1.052,"cpu":0,"memory":156.66015625},{"x":1.103,"cpu":0,"memory":156.66015625},{"x":1.152,"cpu":0,"memory":156.66015625},{"x":1.202,"cpu":0,"memory":156.66015625}];
 
       new Chart(ctx, {
         type: 'line',
@@ -1307,35 +1041,6 @@
                   weight: '500'
                 }
               }
-            },
-            tooltip: {
-              backgroundColor: 'rgba(15, 23, 42, 0.95)',
-              titleColor: '#f1f5f9',
-              bodyColor: '#cbd5e1',
-              borderColor: 'rgba(34, 197, 94, 0.3)',
-              borderWidth: 1,
-              titleFont: {
-                family: 'Inter',
-                size: 13,
-                weight: '600'
-              },
-              bodyFont: {
-                family: 'Inter',
-                size: 12
-              },
-              cornerRadius: 8,
-              displayColors: true,
-              callbacks: {
-                title: function(context) {
-                  return 'Time: ' + context[0].parsed.x.toFixed(2) + 's';
-                },
-                label: function(context) {
-                  let label = context.dataset.label + ': ';
-                  label += context.parsed.y.toFixed(2);
-                  label += context.dataset.label.includes('CPU') ? '%' : ' MB';
-                  return label;
-                }
-              }
             }
           },
           scales: {
@@ -1365,12 +1070,7 @@
               title: {
                 display: true,
                 text: 'CPU Usage (%)',
-                color: '#22c55e',
-                font: {
-                  family: 'Inter',
-                  size: 12,
-                  weight: '500'
-                }
+                color: '#22c55e'
               },
               grid: {
                 color: 'rgba(34, 197, 94, 0.2)'
@@ -1386,12 +1086,7 @@
               title: {
                 display: true,
                 text: 'Memory Usage (MB)',
-                color: '#3b82f6',
-                font: {
-                  family: 'Inter',
-                  size: 12,
-                  weight: '500'
-                }
+                color: '#3b82f6'
               },
               grid: {
                 drawOnChartArea: false,
@@ -1402,17 +1097,21 @@
               }
             }
           },
-          elements: {
-            line: {
-              borderJoinStyle: 'round'
-            }
-          },
           animation: {
             duration: 2000,
             easing: 'easeInOutQuart'
           }
         }
       });
+
+      // Initialize visualizations after DOM load
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+          if (typeof initCarbonFlow === 'function') initCarbonFlow();
+          if (typeof initForest === 'function') initForest();
+        }, 1000);
+      });
+    
 
       // Carbon Flow Visualization
       const carbonCanvas = document.getElementById('carbonFlowCanvas');
@@ -1423,7 +1122,7 @@
         carbonCanvas.height = carbonCanvas.offsetHeight;
         
         const particles = [];
-        const flowRate = 0.0008950511111111112;
+        const flowRate = 0.0001901525951244213;
         
         for (let i = 0; i < 50; i++) {
           particles.push({
@@ -1461,6 +1160,7 @@
         
         animateCarbonFlow();
       }
+    
 
       // Virtual Forest Visualization
       const forestCanvas = document.getElementById('forestCanvas');
@@ -1470,7 +1170,7 @@
         forestCanvas.width = forestCanvas.offsetWidth;
         forestCanvas.height = forestCanvas.offsetHeight;
         
-        const treesNeeded = Math.ceil(0.0002740394393175756 / 21900);
+        const treesNeeded = Math.ceil(0.00023611027539894238 / 21900);
         const maxTrees = Math.min(treesNeeded, 20); // Limit for performance
         const trees = [];
         
@@ -1525,43 +1225,34 @@
         
         animateForest();
       }
+    
 
       // Power Radar Chart
       const radarCtx = document.getElementById('powerRadarChart').getContext('2d');
       
-      const radarData = {
-        labels: ['CPU Efficiency', 'Memory Usage', 'Execution Speed', 'Energy Consumption', 'Carbon Impact', 'Resource Optimization'],
-        datasets: [{
-          label: 'Current Performance',
-          data: [
-            1,
-            86.025390625, // Inverted memory usage
-            99.693828167,
-            99.9993149014017, // Inverted energy usage
-            99.9999972596056, // Inverted CO2
-            67.46775405692425
-          ],
-          fill: true,
-          backgroundColor: 'rgba(59, 130, 246, 0.2)',
-          borderColor: '#3b82f6',
-          pointBackgroundColor: '#3b82f6',
-          pointBorderColor: '#1d4ed8',
-          pointHoverBackgroundColor: '#1d4ed8',
-          pointHoverBorderColor: '#3b82f6'
-        }]
-      };
-
       new Chart(radarCtx, {
         type: 'radar',
-        data: radarData,
+        data: {
+          labels: ['CPU Efficiency', 'Memory Usage', 'Execution Speed', 'Energy Consumption', 'Carbon Impact', 'Resource Optimization'],
+          datasets: [{
+            label: 'Current Performance',
+            data: [
+              9.583333333333329,
+              84.333984375,
+              60,
+              99.9994097243115,
+              99.99999763889724,
+              60.875
+            ],
+            fill: true,
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: '#3b82f6',
+            pointBackgroundColor: '#3b82f6'
+          }]
+        },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          elements: {
-            line: {
-              borderWidth: 3
-            }
-          },
           plugins: {
             legend: {
               display: false
@@ -1569,62 +1260,11 @@
           },
           scales: {
             r: {
-              angleLines: {
-                color: 'rgba(148, 163, 184, 0.3)'
-              },
-              grid: {
-                color: 'rgba(148, 163, 184, 0.2)'
-              },
-              pointLabels: {
-                color: '#cbd5e1',
-                font: {
-                  family: 'Inter',
-                  size: 11,
-                  weight: '500'
-                }
-              },
-              ticks: {
-                color: '#94a3b8',
-                backdropColor: 'transparent'
-              },
               suggestedMin: 0,
               suggestedMax: 100
             }
           }
         }
-      });
-
-      // Add smooth animations on load
-      document.addEventListener('DOMContentLoaded', function() {
-        // Initialize new visualizations
-        setTimeout(() => {
-          initCarbonFlow();
-          initForest();
-        }, 1000);
-
-        // Animate score bars
-        setTimeout(() => {
-          const scoreFills = document.querySelectorAll('.score-fill');
-          scoreFills.forEach(fill => {
-            const width = fill.style.width;
-            fill.style.width = '0%';
-            setTimeout(() => {
-              fill.style.width = width;
-            }, 100);
-          });
-        }, 500);
-
-        // Animate stat cards
-        const statCards = document.querySelectorAll('.stat-card');
-        statCards.forEach((card, index) => {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(20px)';
-          setTimeout(() => {
-            card.style.transition = 'all 0.6s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, index * 100);
-        });
       });
     
     </script>

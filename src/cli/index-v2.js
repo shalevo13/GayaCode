@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// Legacy CLI entry point - now uses new SOLID architecture
+// Updated CLI using new SOLID architecture
 import { EnvironmentalAnalyzer } from '../analyzer/EnvironmentalAnalyzer.js'
 import { DashboardGenerator } from '../dashboard/DashboardGenerator.js'
 import { program } from 'commander'
@@ -52,20 +52,13 @@ program
       
       // Display quick results
       const { metrics } = analysisResult
-      if (metrics) {
-        console.log(chalk.cyan('\n📊 Quick Results:'))
-        console.log(`   ⚡ Energy: ${chalk.yellow((metrics.energyKwh * 1000000).toFixed(2))} µWh`)
-        console.log(`   🌍 CO₂: ${chalk.yellow(metrics.co2Grams.toFixed(4))} g`)
-        console.log(`   ⏱️  Time: ${chalk.yellow(metrics.executionTime.toFixed(0))} ms`)
-        console.log(`   🖥️  Peak CPU: ${chalk.yellow(metrics.peakCpuUsage.toFixed(1))}%`)
-        console.log(`   💾 Peak Memory: ${chalk.yellow((metrics.peakMemoryUsage).toFixed(1))} MB`)
-        if (analysisResult.ecoScore) {
-          console.log(`   🎯 Eco Score: ${chalk.yellow(analysisResult.ecoScore.overall.toFixed(0))}/100 (${analysisResult.ecoScore.grade.letter})`)
-        }
-      } else {
-        console.log(chalk.yellow('\n⚠️  Analysis completed but metrics are not available'))
-        console.log('Analysis result:', JSON.stringify(analysisResult, null, 2))
-      }
+      console.log(chalk.cyan('\n📊 Quick Results:'))
+      console.log(`   ⚡ Energy: ${chalk.yellow((metrics.energyKwh * 1000000).toFixed(2))} µWh`)
+      console.log(`   🌍 CO₂: ${chalk.yellow(metrics.co2Grams.toFixed(4))} g`)
+      console.log(`   ⏱️  Time: ${chalk.yellow(metrics.executionTime.toFixed(0))} ms`)
+      console.log(`   🖥️  Peak CPU: ${chalk.yellow(metrics.peakCpuUsage.toFixed(1))}%`)
+      console.log(`   💾 Peak Memory: ${chalk.yellow((metrics.peakMemoryUsage).toFixed(1))} MB`)
+      console.log(`   🎯 Eco Score: ${chalk.yellow(analysisResult.ecoScore.overall.toFixed(0))}/100 (${analysisResult.ecoScore.grade.letter})`)
       
       // Generate dashboard with new component-based generator
       spinner.start(chalk.blue('🎨 Generating beautiful dashboard...'))
