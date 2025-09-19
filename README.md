@@ -1,186 +1,228 @@
-# 🌱 GayaCode - Environmental Impact Analysis CLI
+# 🌱 GayaCode
 
-GayaCode is a powerful CLI tool that analyzes the environmental impact of your Node.js scripts. It monitors CPU usage, memory consumption, and execution time, then converts these metrics into meaningful environmental data and generates a stunning interactive dashboard.
+> Analyze the environmental impact of your Node.js code with beautiful dashboards and actionable insights
+
+[![npm version](https://badge.fury.io/js/gayacode.svg)](https://www.npmjs.com/package/gayacode)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)](https://nodejs.org/)
+
+GayaCode is a powerful CLI tool that measures and visualizes the environmental impact of your Node.js applications. Get detailed insights into energy consumption, CO₂ emissions, and receive actionable recommendations to make your code more sustainable.
 
 ## ✨ Features
 
-- **🔍 Comprehensive Analysis**: Monitors CPU usage, memory consumption, and execution time with high precision
-- **⚡ Energy Calculation**: Converts resource usage to kilowatt-hours and CO₂ emissions
-- **🎨 Stunning Dashboard**: Generates beautiful, interactive HTML reports with animated charts
-- **📈 Scaling Projections**: Shows environmental impact of running your code 1K, 10K, 100K, and 1M times
-- **🌍 Real-World Equivalences**: Translates impact into relatable terms (smartphone charges, car distance, tree absorption time)
-- **🏆 Eco Scoring**: Grades your code's environmental efficiency from A+ to F
-- **🚀 Zero Setup**: No servers, no configuration - just run and analyze
-- **🌐 Auto Browser**: Automatically opens the beautiful dashboard in your browser
+- 🔋 **Energy Consumption Analysis** - Track real-time energy usage
+- 🌍 **CO₂ Emission Calculations** - See your carbon footprint
+- 📊 **Beautiful Interactive Dashboards** - Stunning visualizations with animations
+- 🌊 **Live Carbon Flow Visualization** - Real-time particle effects
+- � **Virtual Forest Impact** - See how many trees you'd need
+- ⚡ **Power Consumption Radar** - Multi-dimensional performance analysis
+- 🎯 **Eco Score Rating** - Get graded on environmental impact (A+ to F)
+- 📈 **Scaling Projections** - See impact at different scales
+- 🌍 **Real-World Equivalents** - Compare to everyday activities
+- 🏗️ **SOLID Architecture** - Clean, modular, and extensible code
 
-## 🚀 Quick Start
+## 🚀 Installation
 
-### Prerequisites
-- Node.js 16+ 
-- npm
-
-### Installation & Usage
-
-1. **Clone and install**:
-   ```bash
-   git clone https://github.com/shalevo13/GayaCode.git
-   cd GayaCode
-   npm install
-   ```
-
-2. **Analyze any Node.js script**:
-   ```bash
-   node src/cli/index.js your-script.js
-   ```
-
-3. **Or install globally** (optional):
-   ```bash
-   npm link  # (may require sudo)
-   gayacode your-script.js
-   ```
-
-4. **Enjoy the magic**:
-   - ⚡ Watch the real-time analysis
-   - 🎨 Beautiful dashboard opens automatically
-   - 📊 Explore interactive charts and metrics
-   - 🌍 Understand your code's environmental impact
-
-### CLI Options
+### Global Installation (Recommended)
 
 ```bash
-gayacode <script> [options]
-
-Options:
-  -o, --output <path>           Output directory for dashboard (default: ./gayacode-report)
-  --no-open                     Skip opening the dashboard in browser
-  --emission-factor <factor>    CO₂ emission factor in g/kWh (default: 400)
-  --timeout <ms>                Maximum execution time in ms (default: 60000)
-  -h, --help                    Display help for command
+npm install -g gayacode
 ```
 
-### Examples
+### Local Installation
 
 ```bash
-# Basic analysis
-gayacode my-script.js
+npm install gayacode
+npx gayacode <script>
+```
+
+## 📖 Usage
+
+### Basic Usage
+
+```bash
+# Analyze a script and open dashboard
+gayacode your-script.js
+
+# Analyze without opening browser
+gayacode your-script.js --no-open
 
 # Custom output directory
-gayacode my-script.js -o ./analysis-results
+gayacode your-script.js -o ./my-reports
 
-# Use regional emission factor (Nordic countries ~50 g/kWh)
-gayacode my-script.js --emission-factor 50
-
-# Don't open browser automatically
-gayacode my-script.js --no-open
+# Custom emission factor
+gayacode your-script.js --emission-factor 500
 ```
 
-## 📊 Usage
+### Advanced Options
 
-1. **Start Analysis**: Upload or specify a Node.js script path
-2. **View Results**: The dashboard automatically opens showing:
-   - Energy consumption and CO₂ emissions
-   - Real-time performance graphs
-   - Scaling projections for production estimates
-   - Environmental equivalences for context
-   - Eco-score rating
-3. **Export Results**: Save analysis as PNG or JSON for sharing
-4. **Compare Runs**: Track optimization improvements over time
+```bash
+gayacode --help
+```
 
-## 🏗️ Project Structure
+```
+Usage: gayacode [options] <script>
+
+🌱 Analyze the environmental impact of your Node.js code
+
+Arguments:
+  script                      Path to the Node.js script to analyze
+
+Options:
+  -V, --version               output the version number
+  -o, --output <path>         Output directory for the dashboard (default: "./gayacode-report")
+  --no-open                   Skip opening the dashboard in browser
+  --emission-factor <factor>  CO₂ emission factor (g/kWh) (default: "400")
+  --timeout <ms>              Maximum execution time (ms) (default: "60000")
+  -h, --help                  display help for command
+```
+
+## 📊 Dashboard Features
+
+### Performance Timeline
+- Real-time CPU and memory usage graphs
+- Interactive Chart.js visualizations
+- Detailed execution metrics
+
+### Carbon Flow Visualization
+- Animated particle system
+- Real-time CO₂ flow representation
+- Dynamic color coding based on emission rates
+
+### Virtual Forest Impact
+- Growing tree animations
+- Calculate trees needed to offset emissions
+- Beautiful forest visualization with seasonal effects
+
+### Power Consumption Radar
+- Multi-dimensional performance analysis
+- CPU efficiency, memory usage, execution speed
+- Interactive radar charts
+
+### Real-World Impact
+- Energy equivalents (smartphone charges, LED hours, etc.)
+- Carbon equivalents (tree years, car km, flight km)
+- Scaling projections (1K, 1M, 1B executions)
+
+## 🏗️ Architecture
+
+GayaCode follows SOLID principles with a clean, modular architecture:
 
 ```
 src/
-├── analyzer/           # Backend analysis engine
-│   ├── EnvironmentalAnalyzer.js
-│   └── server.js
-├── components/         # React components
-│   ├── dashboard/      # Dashboard components
-│   ├── charts/         # Visualization components
-│   └── comparison/     # Comparison tools
-├── utils/             # Utility functions
-├── monitoring/        # Performance monitoring
-└── sandbox/           # Secure execution environment
+├── core/interfaces/         # Core interfaces and types
+├── monitoring/             # Process monitoring strategies
+├── calculations/           # Environmental calculation strategies
+├── utils/                 # Utility functions and formatters
+├── dashboard/
+│   ├── components/        # Modular dashboard components
+│   ├── templates/         # HTML template engine
+│   └── DashboardGenerator.js
+├── analyzer/              # Main environmental analyzer
+└── cli/                   # Command-line interface
 ```
 
-## 🔧 Configuration
+### Key Components
 
-### Emission Factors
-Customize CO₂ emission factors in the analyzer configuration:
+- **Strategy Pattern**: Pluggable monitoring and calculation strategies
+- **Component-Based**: Modular dashboard components
+- **Dependency Injection**: Clean separation of concerns
+- **Template Engine**: Flexible HTML generation
+- **Interface Segregation**: Well-defined contracts
 
-```javascript
-const analyzer = new EnvironmentalAnalyzer({
-  emissionFactor: 400, // g CO₂/kWh (global average)
-  // Regional factors:
-  // US: 400, EU: 300, Nordic: 50, Coal-heavy: 800+
-})
-```
+## 🎯 Eco Score Rating
 
-### Resource Limits
-Configure execution limits for safety:
+GayaCode provides a comprehensive eco score (0-100) with letter grades:
 
-```javascript
-const analyzer = new EnvironmentalAnalyzer({
-  maxExecutionTime: 60000, // 60 seconds
-  monitoringInterval: 100,  // 100ms sampling
-})
-```
+- **A+ (90-100)**: Excellent - Minimal environmental impact
+- **A (80-89)**: Very Good - Low environmental impact
+- **B (70-79)**: Good - Moderate environmental impact
+- **C (60-69)**: Fair - Room for improvement
+- **D (50-59)**: Poor - Significant environmental impact
+- **F (0-49)**: Very Poor - High environmental impact
 
-## 📈 Understanding the Metrics
+## 🌍 Environmental Metrics
 
 ### Energy Consumption
-- Calculated from CPU and memory usage over time
-- Uses industry-standard power coefficients
-- Displayed in kilowatt-hours (kWh) or microwatt-hours (µWh)
+- Real-time power usage calculation
+- CPU and memory power coefficients
+- High-precision timing measurements
 
 ### CO₂ Emissions
-- Derived from energy consumption using emission factors
-- Accounts for electricity grid carbon intensity
-- Displayed in grams or kilograms of CO₂
+- Configurable emission factors
+- Grid-based carbon intensity
+- Regional emission calculations
 
-### Eco Score
-- Composite rating from A+ to F
-- Considers energy efficiency and execution speed
-- Helps quickly assess environmental performance
+### Real-World Equivalents
+- Smartphone battery charges
+- LED light hours
+- Laptop usage time
+- Tree absorption years
+- Car driving distance
+- Flight emissions
 
-### Environmental Equivalences
-- **Smartphone charges**: Energy comparison to charging devices
-- **Car distance**: CO₂ comparison to vehicle emissions
-- **Tree absorption**: Time needed for a tree to absorb the CO₂
+## 📈 Example Output
 
-## 🧪 Development
-
-### Running Tests
 ```bash
-npm test
+🌱 GayaCode - Environmental Impact Analyzer v2.0
+
+✅ Analysis complete
+
+📊 Quick Results:
+   ⚡ Energy: 0.59 µWh
+   🌍 CO₂: 0.0002 g
+   ⏱️  Time: 1242 ms
+   🖥️  Peak CPU: 160.0%
+   💾 Peak Memory: 156.7 MB
+   🎯 Eco Score: 61/100 (B)
+
+📁 Report saved to: ./gayacode-report/index.html
 ```
 
-### Linting and Formatting
-```bash
-npm run lint
-npm run format
-```
+## �️ Programmatic Usage
 
-### Building for Production
-```bash
-npm run build
+You can also use GayaCode programmatically in your Node.js applications:
+
+```javascript
+import { EnvironmentalAnalyzer } from 'gayacode'
+
+const analyzer = new EnvironmentalAnalyzer({
+  emissionFactor: 400,
+  maxExecutionTime: 60000
+})
+
+const result = await analyzer.analyzeScript('./my-script.js')
+console.log(`Eco Score: ${result.ecoScore.overall}/100`)
+console.log(`CO₂ Emissions: ${result.metrics.co2Grams}g`)
 ```
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run linting and tests
-6. Submit a pull request
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## 📄 License
+### Development Setup
 
-MIT License - see LICENSE file for details
+```bash
+git clone https://github.com/shalevo13/GayaCode.git
+cd GayaCode
+npm install
+npm run dev test-script.js
+```
 
-## 🌍 Environmental Impact
+## � License
 
-This tool itself is designed to have minimal environmental impact:
+MIT © [GayaCode Contributors](https://github.com/shalevo13/GayaCode)
+
+## � Acknowledgments
+
+- Built with ❤️ for a more sustainable future
+- Inspired by the need for environmentally conscious software development
+- Uses [pidusage](https://www.npmjs.com/package/pidusage) for process monitoring
+- Visualizations powered by [Chart.js](https://www.chartjs.org/)
+
+---
+
+**Made with 🌱 by developers who care about the planet**
 - Local execution (no cloud resources)
 - Efficient monitoring algorithms
 - Optimized frontend bundle size
