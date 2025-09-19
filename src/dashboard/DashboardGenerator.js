@@ -1,0 +1,1630 @@
+import fs from 'fs/promises'
+import path from 'path'
+
+/**
+ * Generates beautiful, interactive HTML dashboards for environmental analysis
+ */
+export class DashboardGenerator {
+  constructor() {
+    this.templateData = null
+  }
+
+  /**
+   * Generate a stunning dashboard
+   */
+  async generateDashboard(analysisResult, outputDir) {
+    try {
+      // Create output directory
+      await fs.mkdir(outputDir, { recursive: true })
+      
+      // Generate main dashboard HTML
+      const dashboardHTML = this.generateDashboardHTML(analysisResult)
+      const dashboardPath = path.join(outputDir, 'index.html')
+      
+      await fs.writeFile(dashboardPath, dashboardHTML)
+      
+      // Generate additional assets if needed
+      await this.generateAssets(outputDir)
+      
+      return path.resolve(dashboardPath)
+    } catch (error) {
+      throw new Error(`Failed to generate dashboard: ${error.message}`)
+    }
+  }
+
+  /**
+   * Generate the main dashboard HTML with embedded CSS and JS
+   */
+  generateDashboardHTML(data) {
+    const { metrics, timeline, scalingProjections, equivalences, ecoScore } = data
+    
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 GayaCode Analysis - ${data.scriptName}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        ${this.generateCSS()}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🌱</div>
+                    <div class="logo-text">
+                        <h1>GayaCode Analysis</h1>
+                        <p>Environmental Impact Report</p>
+                    </div>
+                </div>
+                <div class="header-meta">
+                    <div class="script-info">
+                        <h2>${data.scriptName}</h2>
+                        <p>Analyzed on ${new Date(data.timestamp).toLocaleString()}</p>
+                    </div>
+                    <div class="eco-score-badge">
+                        <div class="score-circle" style="background: conic-gradient(${ecoScore.grade.color} ${ecoScore.overall}%, #e5e7eb ${ecoScore.overall}%);">
+                            <div class="score-inner">
+                                <span class="score-value">${ecoScore.overall.toFixed(0)}</span>
+                                <span class="score-grade">${ecoScore.grade.letter}</span>
+                            </div>
+                        </div>
+                        <p>Eco Score</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Quick Stats -->
+        <section class="quick-stats">
+            <div class="stat-card energy">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-content">
+                    <h3>Energy Consumed</h3>
+                    <p class="stat-value">${this.formatEnergy(metrics.energyKwh)}</p>
+                    <p class="stat-change">Peak: ${metrics.peakCpuUsage.toFixed(1)}% CPU</p>
+                </div>
+            </div>
+            <div class="stat-card co2">
+                <div class="stat-icon">🌍</div>
+                <div class="stat-content">
+                    <h3>CO₂ Emissions</h3>
+                    <p class="stat-value">${this.formatCO2(metrics.co2Grams)}</p>
+                    <p class="stat-change">Factor: ${data.analysis.emissionFactor}g/kWh</p>
+                </div>
+            </div>
+            <div class="stat-card time">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-content">
+                    <h3>Execution Time</h3>
+                    <p class="stat-value">${metrics.executionTime.toFixed(0)}ms</p>
+                    <p class="stat-change">${metrics.samples} samples</p>
+                </div>
+            </div>
+            <div class="stat-card memory">
+                <div class="stat-icon">💾</div>
+                <div class="stat-content">
+                    <h3>Peak Memory</h3>
+                    <p class="stat-value">${metrics.peakMemoryUsage.toFixed(1)}MB</p>
+                    <p class="stat-change">Avg: ${metrics.avgMemoryUsage.toFixed(1)}MB</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Charts -->
+        <section class="charts-section">
+            <div class="chart-container">
+                <h3>🔥 Performance Timeline</h3>
+                <div class="chart-wrapper">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Carbon Flow Visualization -->
+        <section class="carbon-flow-section">
+            <h3>🌊 Live Carbon Flow Visualization</h3>
+            <div class="carbon-flow-container">
+                <canvas id="carbonFlowCanvas"></canvas>
+                <div class="flow-legend">
+                    <div class="flow-info">
+                        <div class="flow-metric">
+                            <span class="flow-label">Current Rate</span>
+                            <span class="flow-value" id="currentFlowRate">${this.formatCO2(metrics.co2Grams / (metrics.executionTime / 1000))}/s</span>
+                        </div>
+                        <div class="flow-metric">
+                            <span class="flow-label">Total Emitted</span>
+                            <span class="flow-value" id="totalEmitted">${this.formatCO2(metrics.co2Grams)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Virtual Forest Impact -->
+        <section class="forest-section">
+            <h3>🌲 Virtual Forest Impact</h3>
+            <div class="forest-container">
+                <div class="forest-visualization">
+                    <canvas id="forestCanvas"></canvas>
+                </div>
+                <div class="forest-stats">
+                    <div class="forest-metric">
+                        <div class="metric-icon">🌱</div>
+                        <div class="metric-content">
+                            <span class="metric-title">Trees Needed</span>
+                            <span class="metric-value">${Math.ceil(metrics.co2Grams / 21900)}</span>
+                            <span class="metric-subtitle">to offset CO₂</span>
+                        </div>
+                    </div>
+                    <div class="forest-metric">
+                        <div class="metric-icon">🕐</div>
+                        <div class="metric-content">
+                            <span class="metric-title">Absorption Time</span>
+                            <span class="metric-value">${Math.ceil(metrics.co2Grams / 21900 * 365)} days</span>
+                            <span class="metric-subtitle">for full offset</span>
+                        </div>
+                    </div>
+                    <div class="forest-metric">
+                        <div class="metric-icon">🏞️</div>
+                        <div class="metric-content">
+                            <span class="metric-title">Forest Area</span>
+                            <span class="metric-value">${(metrics.co2Grams / 21900 * 30).toFixed(1)} m²</span>
+                            <span class="metric-subtitle">equivalent space</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Power Consumption Radar -->
+        <section class="radar-section">
+            <h3>⚡ Power Consumption Radar</h3>
+            <div class="radar-container">
+                <canvas id="powerRadarChart"></canvas>
+                <div class="radar-insights">
+                    <div class="insight-card">
+                        <div class="insight-icon">🎯</div>
+                        <div class="insight-content">
+                            <h4>Efficiency Score</h4>
+                            <p class="insight-value">${ecoScore.overall.toFixed(0)}/100</p>
+                            <p class="insight-description">Overall performance rating</p>
+                        </div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-icon">⚡</div>
+                        <div class="insight-content">
+                            <h4>Peak Power</h4>
+                            <p class="insight-value">${((metrics.peakCpuUsage * 0.015) + (metrics.peakMemoryUsage * 0.000003)).toFixed(3)}W</p>
+                            <p class="insight-description">Maximum power draw</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Environmental Equivalences -->
+        <section class="equivalences-section">
+            <h3>🌍 Real-World Impact</h3>
+            <div class="equivalences-grid">
+                <div class="equivalence-category">
+                    <h4>⚡ Energy Equivalents</h4>
+                    <div class="equivalence-items">
+                        ${this.generateEquivalenceItems(equivalences.energy)}
+                    </div>
+                </div>
+                <div class="equivalence-category">
+                    <h4>🌱 Carbon Equivalents</h4>
+                    <div class="equivalence-items">
+                        ${this.generateEquivalenceItems(equivalences.co2)}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scaling Projections -->
+        <section class="scaling-section">
+            <h3>📈 Scaling Impact</h3>
+            <div class="scaling-grid">
+                ${scalingProjections.map(proj => `
+                    <div class="scaling-card">
+                        <div class="scaling-header">
+                            <span class="scaling-icon">${proj.icon}</span>
+                            <h4>${proj.label}</h4>
+                        </div>
+                        <div class="scaling-metrics">
+                            <div class="scaling-metric">
+                                <span class="metric-label">Energy</span>
+                                <span class="metric-value">${this.formatEnergy(proj.energyKwh)}</span>
+                            </div>
+                            <div class="scaling-metric">
+                                <span class="metric-label">CO₂</span>
+                                <span class="metric-value">${this.formatCO2(proj.co2Grams)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </section>
+
+        <!-- Detailed Breakdown -->
+        <section class="breakdown-section">
+            <div class="breakdown-grid">
+                <div class="breakdown-card">
+                    <h3>🎯 Eco Score Breakdown</h3>
+                    <div class="score-breakdown">
+                        <div class="score-item">
+                            <span>Energy Efficiency</span>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${ecoScore.breakdown.energy}%"></div>
+                            </div>
+                            <span>${ecoScore.breakdown.energy.toFixed(0)}</span>
+                        </div>
+                        <div class="score-item">
+                            <span>Execution Speed</span>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${ecoScore.breakdown.time}%"></div>
+                            </div>
+                            <span>${ecoScore.breakdown.time.toFixed(0)}</span>
+                        </div>
+                        <div class="score-item">
+                            <span>CPU Efficiency</span>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${ecoScore.breakdown.cpu}%"></div>
+                            </div>
+                            <span>${ecoScore.breakdown.cpu.toFixed(0)}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="breakdown-card">
+                    <h3>📊 Analysis Details</h3>
+                    <div class="details-list">
+                        <div class="detail-item">
+                            <span>Script Path</span>
+                            <span>${data.scriptPath}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Monitoring Interval</span>
+                            <span>${data.analysis.monitoringInterval}ms</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>CPU Power Coefficient</span>
+                            <span>${data.analysis.cpuPowerCoefficient} kW/%</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>Memory Power Coefficient</span>
+                            <span>${data.analysis.memoryPowerCoefficient} kW/MB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Generated by <strong>🌱 GayaCode</strong> - Making code more sustainable, one script at a time.</p>
+            <p>Analysis completed in ${metrics.executionTime.toFixed(0)}ms with ${metrics.samples} data points.</p>
+        </footer>
+    </div>
+
+    <script>
+        ${this.generateJavaScript(timeline, metrics, ecoScore)}
+    </script>
+</body>
+</html>`
+  }
+
+  /**
+   * Generate beautiful CSS styles
+   */
+  generateCSS() {
+    return `
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: radial-gradient(ellipse at top, #1e293b 0%, #0f172a 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #e2e8f0;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: rgba(30, 41, 59, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        color: #f1f5f9;
+        padding: 40px;
+        border-bottom: 1px solid rgba(34, 197, 94, 0.3);
+        position: relative;
+      }
+
+      .header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
+          radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 30px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .logo-icon {
+        font-size: 3rem;
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+      }
+
+      .logo-text h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .logo-text p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        font-weight: 300;
+      }
+
+      .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .script-info {
+        text-align: right;
+      }
+
+      .script-info h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .script-info p {
+        opacity: 0.8;
+        font-size: 0.9rem;
+      }
+
+      .eco-score-badge {
+        text-align: center;
+      }
+
+      .score-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        padding: 8px;
+        margin-bottom: 8px;
+      }
+
+      .score-inner {
+        width: 100%;
+        height: 100%;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+      }
+
+      .score-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .score-grade {
+        font-size: 0.8rem;
+        font-weight: 500;
+        opacity: 0.7;
+      }
+
+      .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.5);
+      }
+
+      .stat-card {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+      }
+
+      .stat-card.co2::before {
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      }
+
+      .stat-card.time::before {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+
+      .stat-card.memory::before {
+        background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+      }
+
+      .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        border-color: rgba(34, 197, 94, 0.5);
+      }
+
+      .stat-card .stat-icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+      }
+
+      .stat-content h3 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #94a3b8;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin-bottom: 4px;
+      }
+
+      .stat-change {
+        font-size: 0.85rem;
+        color: #cbd5e1;
+      }
+
+      .charts-section, .carbon-flow-section, .forest-section, .radar-section, .equivalences-section, .scaling-section, .breakdown-section {
+        padding: 40px;
+        background: rgba(15, 23, 42, 0.3);
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .charts-section h3, .carbon-flow-section h3, .forest-section h3, .radar-section h3, .equivalences-section h3, .scaling-section h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #f1f5f9;
+      }
+
+      /* Carbon Flow Visualization Styles */
+      .carbon-flow-container {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+      }
+
+      #carbonFlowCanvas {
+        width: 100%;
+        height: 300px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+      }
+
+      .flow-legend {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 12px;
+        padding: 16px;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .flow-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .flow-metric {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .flow-label {
+        font-size: 0.8rem;
+        color: #94a3b8;
+        margin-bottom: 4px;
+      }
+
+      .flow-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #22c55e;
+      }
+
+      /* Virtual Forest Styles */
+      .forest-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        align-items: start;
+      }
+
+      .forest-visualization {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      #forestCanvas {
+        width: 100%;
+        height: 320px;
+        border-radius: 12px;
+        background: linear-gradient(180deg, #0f172a 0%, #1e293b 30%, #164e63 100%);
+      }
+
+      .forest-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .forest-metric {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .forest-metric:hover {
+        transform: translateY(-2px);
+        border-color: rgba(34, 197, 94, 0.5);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .forest-metric .metric-icon {
+        font-size: 2rem;
+        width: 50px;
+        text-align: center;
+      }
+
+      .metric-content {
+        flex: 1;
+      }
+
+      .metric-title {
+        display: block;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        margin-bottom: 4px;
+      }
+
+      .metric-value {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin-bottom: 2px;
+      }
+
+      .metric-subtitle {
+        display: block;
+        font-size: 0.8rem;
+        color: #cbd5e1;
+      }
+
+      /* Power Radar Styles */
+      .radar-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        align-items: start;
+      }
+
+      .radar-container > canvas {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+        height: 350px;
+      }
+
+      .radar-insights {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .insight-card {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .insight-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(59, 130, 246, 0.5);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .insight-icon {
+        font-size: 2rem;
+        width: 50px;
+        text-align: center;
+      }
+
+      .insight-content h4 {
+        font-size: 1rem;
+        color: #f1f5f9;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .insight-value {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #3b82f6;
+        margin-bottom: 4px;
+      }
+
+      .insight-description {
+        font-size: 0.8rem;
+        color: #cbd5e1;
+        margin: 0;
+      }
+
+      .chart-container {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .chart-wrapper {
+        height: 400px;
+        position: relative;
+      }
+
+
+
+
+
+      .world-map-container {
+        width: 100%;
+        height: 100%;
+        min-height: 400px;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      /* Leaflet map styling overrides */
+      .leaflet-container {
+        background: rgba(15, 23, 42, 0.8) !important;
+        font-family: 'Inter', sans-serif !important;
+      }
+
+      .leaflet-popup-content-wrapper {
+        background: rgba(15, 23, 42, 0.95) !important;
+        color: #f1f5f9 !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(34, 197, 94, 0.3) !important;
+        backdrop-filter: blur(10px);
+      }
+
+      .leaflet-popup-tip {
+        background: rgba(15, 23, 42, 0.95) !important;
+        border: 1px solid rgba(34, 197, 94, 0.3) !important;
+      }
+
+      .map-info-tooltip {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        z-index: 1000 !important;
+        pointer-events: none !important;
+      }
+
+      .map-legend {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .legend-title {
+        color: #f1f5f9;
+        font-weight: 600;
+        margin-bottom: 16px;
+        font-size: 1rem;
+      }
+
+      .legend-items {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+      }
+
+      .legend-color.clean { background: #22c55e; }
+      .legend-color.low { background: #eab308; }
+      .legend-color.medium { background: #f97316; }
+      .legend-color.high { background: #dc2626; }
+
+      .country {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        stroke: rgba(148, 163, 184, 0.3);
+        stroke-width: 0.5;
+      }
+
+      .country:hover {
+        stroke: #22c55e;
+        stroke-width: 2;
+        filter: brightness(1.2);
+        transform-origin: center;
+        animation: pulse-country 0.3s ease;
+      }
+
+      .other-region {
+        stroke: rgba(148, 163, 184, 0.2);
+        stroke-width: 0.5;
+        transition: all 0.2s ease;
+      }
+
+      .other-region:hover {
+        fill: rgba(100, 116, 139, 0.5);
+      }
+
+      @keyframes pulse-country {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+      }
+
+      .tooltip {
+        position: absolute;
+        background: rgba(15, 23, 42, 0.95);
+        color: #f1f5f9;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        pointer-events: none;
+        z-index: 1000;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.2s ease;
+      }
+
+      .tooltip.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .tooltip-country {
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: #22c55e;
+      }
+
+      .tooltip-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .tooltip-description {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        margin-top: 4px;
+      }
+
+      .equivalences-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+      }
+
+      .equivalence-category h4 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #f1f5f9;
+      }
+
+      .equivalence-items {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .equivalence-item {
+        background: rgba(30, 41, 59, 0.6);
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .equivalence-item:hover {
+        background: rgba(30, 41, 59, 0.8);
+        transform: translateX(4px);
+        border-color: rgba(34, 197, 94, 0.4);
+      }
+
+      .equivalence-icon {
+        font-size: 1.5rem;
+        width: 40px;
+        text-align: center;
+      }
+
+      .equivalence-content {
+        flex: 1;
+      }
+
+      .equivalence-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .equivalence-unit {
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        margin-top: 2px;
+      }
+
+      .scaling-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+      }
+
+      .scaling-card {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .scaling-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        border-color: rgba(34, 197, 94, 0.5);
+      }
+
+      .scaling-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .scaling-icon {
+        font-size: 1.5rem;
+      }
+
+      .scaling-header h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .scaling-metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .scaling-metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .metric-label {
+        font-size: 0.9rem;
+        color: #94a3b8;
+      }
+
+      .metric-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #f1f5f9;
+      }
+
+      .breakdown-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+      }
+
+      .breakdown-card {
+        background: rgba(30, 41, 59, 0.8);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .breakdown-card h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #f1f5f9;
+      }
+
+      .score-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .score-item {
+        display: grid;
+        grid-template-columns: 1fr 2fr auto;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .score-item span:first-child {
+        color: #cbd5e1;
+      }
+
+      .score-item span:last-child {
+        color: #f1f5f9;
+        font-weight: 600;
+      }
+
+      .score-bar {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .score-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        border-radius: 4px;
+        transition: width 1s ease;
+      }
+
+      .details-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .detail-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .detail-item:last-child {
+        border-bottom: none;
+      }
+
+      .detail-item span:first-child {
+        font-weight: 500;
+        color: #94a3b8;
+      }
+
+      .detail-item span:last-child {
+        font-weight: 600;
+        color: #f1f5f9;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.85rem;
+      }
+
+      .footer {
+        background: rgba(15, 23, 42, 0.8);
+        padding: 24px 40px;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.9rem;
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+
+      .footer p {
+        margin-bottom: 4px;
+      }
+
+      .footer strong {
+        color: #22c55e;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          border-radius: 16px;
+        }
+
+        .header {
+          padding: 24px;
+        }
+
+        .header-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .logo-text h1 {
+          font-size: 2rem;
+        }
+
+        .quick-stats, .charts-section, .equivalences-section, .scaling-section, .breakdown-section {
+          padding: 24px;
+        }
+
+        .equivalences-grid, .breakdown-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .forest-container, .radar-container {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .flow-legend {
+          position: relative;
+          top: auto;
+          right: auto;
+          margin-top: 16px;
+        }
+
+        .forest-stats, .radar-insights {
+          order: -1;
+        }
+      }
+    `
+  }
+
+  /**
+   * Generate interactive JavaScript
+   */
+  generateJavaScript(timeline, metrics, ecoScore) {
+    return `
+      // Performance Chart
+      const ctx = document.getElementById('performanceChart').getContext('2d');
+      
+      const chartData = ${JSON.stringify(timeline.map(point => ({
+        x: point.timeSeconds,
+        cpu: point.cpu,
+        memory: point.memoryMB
+      })))};
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'CPU Usage (%)',
+              data: chartData.map(d => ({ x: d.x, y: d.cpu })),
+              borderColor: '#22c55e',
+              backgroundColor: 'rgba(34, 197, 94, 0.1)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 6,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Memory Usage (MB)',
+              data: chartData.map(d => ({ x: d.x, y: d.memory })),
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 6,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                usePointStyle: true,
+                padding: 20,
+                font: {
+                  family: 'Inter',
+                  size: 12,
+                  weight: '500'
+                }
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(15, 23, 42, 0.95)',
+              titleColor: '#f1f5f9',
+              bodyColor: '#cbd5e1',
+              borderColor: 'rgba(34, 197, 94, 0.3)',
+              borderWidth: 1,
+              titleFont: {
+                family: 'Inter',
+                size: 13,
+                weight: '600'
+              },
+              bodyFont: {
+                family: 'Inter',
+                size: 12
+              },
+              cornerRadius: 8,
+              displayColors: true,
+              callbacks: {
+                title: function(context) {
+                  return 'Time: ' + context[0].parsed.x.toFixed(2) + 's';
+                },
+                label: function(context) {
+                  let label = context.dataset.label + ': ';
+                  label += context.parsed.y.toFixed(2);
+                  label += context.dataset.label.includes('CPU') ? '%' : ' MB';
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              type: 'linear',
+              display: true,
+              title: {
+                display: true,
+                text: 'Time (seconds)',
+                font: {
+                  family: 'Inter',
+                  size: 12,
+                  weight: '500'
+                }
+              },
+              grid: {
+                color: 'rgba(148, 163, 184, 0.2)'
+              },
+              ticks: {
+                color: '#94a3b8'
+              }
+            },
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: {
+                display: true,
+                text: 'CPU Usage (%)',
+                color: '#22c55e',
+                font: {
+                  family: 'Inter',
+                  size: 12,
+                  weight: '500'
+                }
+              },
+              grid: {
+                color: 'rgba(34, 197, 94, 0.2)'
+              },
+              ticks: {
+                color: '#22c55e'
+              }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              title: {
+                display: true,
+                text: 'Memory Usage (MB)',
+                color: '#3b82f6',
+                font: {
+                  family: 'Inter',
+                  size: 12,
+                  weight: '500'
+                }
+              },
+              grid: {
+                drawOnChartArea: false,
+                color: 'rgba(59, 130, 246, 0.2)'
+              },
+              ticks: {
+                color: '#3b82f6'
+              }
+            }
+          },
+          elements: {
+            line: {
+              borderJoinStyle: 'round'
+            }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeInOutQuart'
+          }
+        }
+      });
+
+      // Carbon Flow Visualization
+      const carbonCanvas = document.getElementById('carbonFlowCanvas');
+      const carbonCtx = carbonCanvas.getContext('2d');
+      
+      function initCarbonFlow() {
+        carbonCanvas.width = carbonCanvas.offsetWidth;
+        carbonCanvas.height = carbonCanvas.offsetHeight;
+        
+        const particles = [];
+        const flowRate = ${metrics.co2Grams / (metrics.executionTime / 1000)};
+        
+        for (let i = 0; i < 50; i++) {
+          particles.push({
+            x: Math.random() * carbonCanvas.width,
+            y: Math.random() * carbonCanvas.height,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            size: Math.random() * 3 + 1,
+            opacity: Math.random() * 0.7 + 0.3,
+            hue: 120 - (flowRate * 10) // Green to red based on flow rate
+          });
+        }
+        
+        function animateCarbonFlow() {
+          carbonCtx.fillStyle = 'rgba(15, 23, 42, 0.1)';
+          carbonCtx.fillRect(0, 0, carbonCanvas.width, carbonCanvas.height);
+          
+          particles.forEach(particle => {
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            
+            if (particle.x < 0) particle.x = carbonCanvas.width;
+            if (particle.x > carbonCanvas.width) particle.x = 0;
+            if (particle.y < 0) particle.y = carbonCanvas.height;
+            if (particle.y > carbonCanvas.height) particle.y = 0;
+            
+            carbonCtx.beginPath();
+            carbonCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            carbonCtx.fillStyle = \`hsla(\${particle.hue}, 70%, 60%, \${particle.opacity})\`;
+            carbonCtx.fill();
+          });
+          
+          requestAnimationFrame(animateCarbonFlow);
+        }
+        
+        animateCarbonFlow();
+      }
+
+      // Virtual Forest Visualization
+      const forestCanvas = document.getElementById('forestCanvas');
+      const forestCtx = forestCanvas.getContext('2d');
+      
+      function initForest() {
+        forestCanvas.width = forestCanvas.offsetWidth;
+        forestCanvas.height = forestCanvas.offsetHeight;
+        
+        const treesNeeded = Math.ceil(${metrics.co2Grams} / 21900);
+        const maxTrees = Math.min(treesNeeded, 20); // Limit for performance
+        const trees = [];
+        
+        for (let i = 0; i < maxTrees; i++) {
+          trees.push({
+            x: (i + 1) * (forestCanvas.width / (maxTrees + 1)),
+            y: forestCanvas.height - 50,
+            height: 0,
+            maxHeight: Math.random() * 80 + 60,
+            growth: Math.random() * 0.5 + 0.3,
+            leaves: []
+          });
+        }
+        
+        function drawTree(tree) {
+          // Trunk
+          forestCtx.fillStyle = '#8B4513';
+          forestCtx.fillRect(tree.x - 5, tree.y - tree.height, 10, tree.height);
+          
+          // Leaves
+          if (tree.height > tree.maxHeight * 0.3) {
+            forestCtx.fillStyle = '#22c55e';
+            forestCtx.beginPath();
+            forestCtx.arc(tree.x, tree.y - tree.height, tree.height * 0.4, 0, Math.PI * 2);
+            forestCtx.fill();
+          }
+        }
+        
+        function animateForest() {
+          forestCtx.clearRect(0, 0, forestCanvas.width, forestCanvas.height);
+          
+          // Sky gradient
+          const gradient = forestCtx.createLinearGradient(0, 0, 0, forestCanvas.height);
+          gradient.addColorStop(0, '#1e293b');
+          gradient.addColorStop(1, '#164e63');
+          forestCtx.fillStyle = gradient;
+          forestCtx.fillRect(0, 0, forestCanvas.width, forestCanvas.height);
+          
+          // Ground
+          forestCtx.fillStyle = '#15803d';
+          forestCtx.fillRect(0, forestCanvas.height - 30, forestCanvas.width, 30);
+          
+          trees.forEach(tree => {
+            if (tree.height < tree.maxHeight) {
+              tree.height += tree.growth;
+            }
+            drawTree(tree);
+          });
+          
+          requestAnimationFrame(animateForest);
+        }
+        
+        animateForest();
+      }
+
+      // Power Radar Chart
+      const radarCtx = document.getElementById('powerRadarChart').getContext('2d');
+      
+      const radarData = {
+        labels: ['CPU Efficiency', 'Memory Usage', 'Execution Speed', 'Energy Consumption', 'Carbon Impact', 'Resource Optimization'],
+        datasets: [{
+          label: 'Current Performance',
+          data: [
+            ${ecoScore.breakdown.cpu || 75},
+            ${100 - (metrics.peakMemoryUsage / 1000) * 100}, // Inverted memory usage
+            ${ecoScore.breakdown.time || 80},
+            ${100 - (metrics.energyKwh * 1000)}, // Inverted energy usage
+            ${100 - (metrics.co2Grams / 100)}, // Inverted CO2
+            ${ecoScore.overall || 78}
+          ],
+          fill: true,
+          backgroundColor: 'rgba(59, 130, 246, 0.2)',
+          borderColor: '#3b82f6',
+          pointBackgroundColor: '#3b82f6',
+          pointBorderColor: '#1d4ed8',
+          pointHoverBackgroundColor: '#1d4ed8',
+          pointHoverBorderColor: '#3b82f6'
+        }]
+      };
+
+      new Chart(radarCtx, {
+        type: 'radar',
+        data: radarData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          elements: {
+            line: {
+              borderWidth: 3
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            r: {
+              angleLines: {
+                color: 'rgba(148, 163, 184, 0.3)'
+              },
+              grid: {
+                color: 'rgba(148, 163, 184, 0.2)'
+              },
+              pointLabels: {
+                color: '#cbd5e1',
+                font: {
+                  family: 'Inter',
+                  size: 11,
+                  weight: '500'
+                }
+              },
+              ticks: {
+                color: '#94a3b8',
+                backdropColor: 'transparent'
+              },
+              suggestedMin: 0,
+              suggestedMax: 100
+            }
+          }
+        }
+      });
+
+      // Add smooth animations on load
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize new visualizations
+        setTimeout(() => {
+          initCarbonFlow();
+          initForest();
+        }, 1000);
+
+        // Animate score bars
+        setTimeout(() => {
+          const scoreFills = document.querySelectorAll('.score-fill');
+          scoreFills.forEach(fill => {
+            const width = fill.style.width;
+            fill.style.width = '0%';
+            setTimeout(() => {
+              fill.style.width = width;
+            }, 100);
+          });
+        }, 500);
+
+        // Animate stat cards
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, index * 100);
+        });
+      });
+    `
+  }
+
+  /**
+   * Generate equivalence items HTML
+   */
+  generateEquivalenceItems(equivalences) {
+    return Object.entries(equivalences).map(([key, equiv]) => `
+      <div class="equivalence-item">
+        <div class="equivalence-icon">${equiv.icon}</div>
+        <div class="equivalence-content">
+          <div class="equivalence-value">${this.formatNumber(equiv.value)}</div>
+          <div class="equivalence-unit">${equiv.unit}</div>
+        </div>
+      </div>
+    `).join('')
+  }
+
+  /**
+   * Generate additional assets (currently none needed)
+   */
+  async generateAssets(outputDir) {
+    // Could generate additional CSS/JS files or images here if needed
+    return Promise.resolve()
+  }
+
+  /**
+   * Format energy values
+   */
+  formatEnergy(kwh) {
+    if (kwh < 0.000001) return `${(kwh * 1000000000).toFixed(2)} nWh`
+    if (kwh < 0.001) return `${(kwh * 1000000).toFixed(2)} µWh`
+    if (kwh < 1) return `${(kwh * 1000).toFixed(2)} mWh`
+    return `${kwh.toFixed(2)} kWh`
+  }
+
+  /**
+   * Format CO2 values
+   */
+  formatCO2(grams) {
+    if (grams < 0.001) return `${(grams * 1000000).toFixed(2)} µg`
+    if (grams < 1) return `${(grams * 1000).toFixed(2)} mg`
+    if (grams < 1000) return `${grams.toFixed(3)} g`
+    return `${(grams / 1000).toFixed(2)} kg`
+  }
+
+  /**
+   * Format numbers for display
+   */
+  formatNumber(value) {
+    if (value < 0.01) return value.toFixed(4)
+    if (value < 1) return value.toFixed(2)
+    if (value < 100) return value.toFixed(1)
+    return Math.round(value).toLocaleString()
+  }
+}

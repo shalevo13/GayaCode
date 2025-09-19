@@ -1,0 +1,12 @@
+{
+	"servers": {
+		"task-master-ai": {
+			"command": "npx",
+			"args": ["-y", "--package=task-master-ai", "task-master-ai"],
+			"env": {
+				"GEMINI_API_KEY": "AIzaSyBIjh_q7kbR6YCdtCU4mGxOC3sTmCOvols"
+			},
+			"type": "stdio"
+		}
+	},
+}

@@ -1,0 +1,93 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Setup Project Structure",
+			"type": "shell",
+			"command": "mkdir -p src/{components,utils,monitoring,sandbox} public assets docs tests && mkdir -p src/components/{dashboard,charts,comparison} && echo 'Project structure created'",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Initialize Package.json",
+			"type": "shell",
+			"command": "npm init -y && echo 'Package.json initialized'",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Install Core Dependencies",
+			"type": "shell",
+			"command": "npm install react react-dom recharts tailwindcss pidusage express cors",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Install Dev Dependencies",
+			"type": "shell",
+			"command": "npm install -D @vitejs/plugin-react vite typescript @types/react @types/react-dom @types/node eslint prettier jest @testing-library/react @testing-library/jest-dom playwright",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Setup Vite Config",
+			"type": "shell",
+			"command": "touch vite.config.js && echo 'Vite config file created'",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Setup Tailwind CSS",
+			"type": "shell",
+			"command": "npx tailwindcss init -p && echo 'Tailwind CSS initialized'",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Create Core Files",
+			"type": "shell",
+			"command": "touch src/main.jsx src/App.jsx src/index.css public/index.html && echo 'Core files created'",
+			"group": "build",
+			"isBackground": false
+		},
+		{
+			"label": "Build Application",
+			"type": "shell",
+			"command": "npm run build",
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Start Development Server",
+			"type": "shell",
+			"command": "npm run dev",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Tests",
+			"type": "shell",
+			"command": "npm test",
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run Linter",
+			"type": "shell",
+			"command": "npx eslint src/",
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": ["$eslint-stylish"]
+		},
+		{
+			"label": "Format Code",
+			"type": "shell",
+			"command": "npx prettier --write src/",
+			"group": "build",
+			"isBackground": false
+		}
+	]
+}

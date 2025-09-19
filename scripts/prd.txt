@@ -1,0 +1,370 @@
+# GayaCode Product Requirements Document
+
+## 1. Introduction
+
+This Product Requirements Document (PRD) defines the functional and technical specifications for GayaCode, a local web-based tool designed to measure and visualize the environmental impact of Node.js code execution. This document serves as the primary reference for the development team, stakeholders, and quality assurance teams to ensure alignment on product vision, features, and implementation requirements.
+
+The document outlines the complete scope of features, user interactions, technical architecture, and acceptance criteria necessary to deliver a comprehensive environmental impact analysis tool for developers.
+
+## 2. Product overview
+
+GayaCode is an innovative developer tool that bridges the gap between code performance optimization and environmental consciousness. The product provides real-time monitoring and analysis of Node.js script execution, converting technical metrics into meaningful environmental impact data.
+
+### 2.1 Core value proposition
+- **Immediate feedback**: Real-time visualization of code environmental impact
+- **Developer-friendly**: Integrates seamlessly into existing development workflows
+- **Educational**: Provides relatable environmental equivalences to promote awareness
+- **Local execution**: Ensures privacy and security by running entirely offline
+- **Actionable insights**: Enables developers to optimize code for environmental efficiency
+
+### 2.2 Key differentiators
+- First-of-its-kind local environmental impact analysis tool
+- Intuitive React-based dashboard with compelling visualizations
+- Sandboxed execution environment for secure code analysis
+- Comprehensive scaling projections for production impact estimation
+
+## 3. Goals and objectives
+
+### 3.1 Primary goals
+- **Raise environmental awareness**: Help developers understand the carbon footprint of their code
+- **Enable optimization**: Provide actionable data to improve code environmental efficiency
+- **Promote sustainable development**: Integrate environmental considerations into the development process
+- **Deliver immediate value**: Provide instant feedback without requiring external dependencies
+
+### 3.2 Success metrics
+- **Adoption rate**: Number of developers using the tool regularly
+- **Code improvement**: Measurable reduction in energy consumption after tool usage
+- **User engagement**: Average session duration and repeat usage frequency
+- **Performance**: Sub-60-second analysis time for typical scripts
+
+### 3.3 Long-term objectives
+- Establish GayaCode as the standard tool for environmental impact analysis in development
+- Build a community of environmentally conscious developers
+- Expand support to additional programming languages and runtime environments
+- Integrate with popular development tools and CI/CD pipelines
+
+## 4. Target audience
+
+### 4.1 Primary users
+- **Individual developers**: Node.js developers seeking to optimize code environmental impact
+- **Development teams**: Teams implementing sustainable development practices
+- **Technical leads**: Engineers responsible for performance optimization and technical debt management
+
+### 4.2 Secondary users
+- **DevOps engineers**: Professionals optimizing deployment and runtime efficiency
+- **Sustainability officers**: Corporate roles focused on reducing organizational carbon footprint
+- **Educational institutions**: Computer science educators teaching sustainable programming practices
+
+### 4.3 User personas
+- **Eco-conscious developer**: Environmentally aware programmer seeking tools to align code with values
+- **Performance optimizer**: Developer focused on code efficiency who values environmental metrics as optimization indicators
+- **Team lead**: Technical leader evaluating tools for team-wide adoption to improve development practices
+
+## 5. Features and requirements
+
+### 5.1 Core monitoring capabilities
+- **Execution time tracking**: Precise measurement of script runtime from start to completion
+- **CPU usage monitoring**: Real-time tracking of average and peak CPU utilization percentages
+- **Memory consumption analysis**: Peak memory usage measurement during script execution
+- **Energy consumption estimation**: Conversion of CPU and memory metrics to estimated kilowatt-hours (kWh)
+- **CO₂ emission calculation**: Translation of energy consumption to carbon emissions using configurable emission factors
+
+### 5.2 Dashboard and visualization
+- **Automatic dashboard launch**: React-based interface opens immediately after analysis completion
+- **Energy and CO₂ overview**: Summary cards displaying total energy consumed and CO₂ emitted per execution
+- **Scaling projection module**: Interactive projections showing environmental impact of running script 1K, 10K, 100K, and 1M times
+- **Real-time performance graphs**: Line charts displaying CPU and memory usage over execution timeline
+- **Environmental equivalences**: Relatable comparisons such as smartphone charging cycles or vehicle distance traveled
+- **Eco-score visualization**: Color-coded badge system indicating overall environmental efficiency rating
+
+### 5.3 Analysis and reporting
+- **Comparative analysis**: Side-by-side comparison of multiple script runs to track optimization progress
+- **Export functionality**: Screenshot capture and PNG export for sharing results with teams
+- **Historical tracking**: Local storage of previous analyses for trend identification
+- **Optimization recommendations**: Automated suggestions based on analysis results
+
+### 5.4 Security and safety
+- **Sandboxed execution**: Isolated environment preventing target scripts from affecting host system
+- **Resource limiting**: Configurable bounds on CPU, memory, and execution time to prevent system overload
+- **Safe termination**: Automatic script termination if resource limits or timeout thresholds are exceeded
+
+## 6. User stories and acceptance criteria
+
+### 6.1 Core execution and monitoring
+
+**ST-101: Execute Node.js script for analysis**
+- **As a** developer
+- **I want to** run my Node.js script through GayaCode
+- **So that I can** measure its environmental impact
+- **Acceptance criteria:**
+  - Script executes in isolated sandbox environment
+  - Execution completes within 60 seconds for typical scripts
+  - System remains stable during script execution
+  - Resource monitoring begins immediately upon script start
+
+**ST-102: Monitor real-time performance metrics**
+- **As a** developer
+- **I want to** see real-time CPU and memory usage during script execution
+- **So that I can** understand resource consumption patterns
+- **Acceptance criteria:**
+  - CPU usage displays average and peak percentages
+  - Memory usage shows current and peak consumption
+  - Metrics update at minimum 1-second intervals
+  - Data collection maintains sub-1% system overhead
+
+**ST-103: Calculate energy consumption estimates**
+- **As a** developer
+- **I want to** see estimated energy consumption of my script
+- **So that I can** understand the power requirements of my code
+- **Acceptance criteria:**
+  - Energy calculation uses industry-standard CPU and memory power coefficients
+  - Results display in kWh with appropriate decimal precision
+  - Calculation methodology is transparent and documented
+  - Estimates account for both active processing and memory overhead
+
+**ST-104: Generate CO₂ emission estimates**
+- **As a** developer
+- **I want to** see estimated CO₂ emissions from my script execution
+- **So that I can** understand the carbon footprint of my code
+- **Acceptance criteria:**
+  - CO₂ calculation uses configurable emission factor (default 400g CO₂/kWh)
+  - Results display in appropriate units (grams, kilograms)
+  - Calculation includes both direct and indirect emissions
+  - Regional emission factors can be customized
+
+### 6.2 Dashboard and visualization
+
+**ST-201: Launch analysis dashboard automatically**
+- **As a** developer
+- **I want** the dashboard to open automatically after analysis
+- **So that I can** immediately view results without additional steps
+- **Acceptance criteria:**
+  - Dashboard opens within 3 seconds of analysis completion
+  - Browser launches with pre-populated analysis data
+  - Dashboard displays correctly on desktop browsers (Chrome, Firefox, Safari, Edge)
+  - No manual navigation or data loading required
+
+**ST-202: View energy and CO₂ overview**
+- **As a** developer
+- **I want** to see a clear summary of energy and CO₂ impact
+- **So that I can** quickly understand my script's environmental footprint
+- **Acceptance criteria:**
+  - Overview cards display total energy consumption and CO₂ emissions
+  - Values include appropriate units and precision
+  - Cards use color coding to indicate efficiency levels
+  - Summary includes execution time and resource usage highlights
+
+**ST-203: Explore scaling projections**
+- **As a** developer
+- **I want** to see projected environmental impact at scale
+- **So that I can** understand production-level implications of my code
+- **Acceptance criteria:**
+  - Projections show impact for 1K, 10K, 100K, and 1M executions
+  - Results display energy consumption and CO₂ emissions for each scale
+  - Interactive elements allow custom scaling factor input
+  - Projections include confidence intervals and assumptions
+
+**ST-204: Analyze performance graphs**
+- **As a** developer
+- **I want** to see detailed CPU and memory usage over time
+- **So that I can** identify performance bottlenecks and optimization opportunities
+- **Acceptance criteria:**
+  - Line charts display CPU percentage and memory usage over execution timeline
+  - Graphs are interactive with zoom and hover capabilities
+  - Peak usage moments are clearly marked and annotated
+  - Timeline corresponds to actual script execution phases
+
+**ST-205: Understand environmental equivalences**
+- **As a** developer
+- **I want** to see relatable comparisons for environmental impact
+- **So that I can** better understand the real-world significance of my code's footprint
+- **Acceptance criteria:**
+  - Equivalences include smartphone charging cycles, light bulb hours, vehicle distance
+  - Comparisons are accurate and use current reference data
+  - Multiple equivalence types are provided for different perspectives
+  - Equivalences update dynamically based on analysis results
+
+**ST-206: Receive eco-score rating**
+- **As a** developer
+- **I want** to see an overall efficiency score for my script
+- **So that I can** quickly assess environmental performance
+- **Acceptance criteria:**
+  - Score uses standardized scale (A+ to F or 1-100)
+  - Rating considers energy efficiency, execution time, and resource optimization
+  - Color-coded badge provides immediate visual feedback
+  - Score calculation methodology is transparent and consistent
+
+### 6.3 Comparison and optimization
+
+**ST-301: Compare multiple script runs**
+- **As a** developer
+- **I want** to compare different versions of my script
+- **So that I can** measure optimization improvements
+- **Acceptance criteria:**
+  - Side-by-side comparison of up to 3 script runs
+  - Comparison includes all key metrics (energy, CO₂, performance)
+  - Percentage improvements/regressions are calculated and highlighted
+  - Visual indicators show which version performs better
+
+**ST-302: Export analysis results**
+- **As a** developer
+- **I want** to export analysis results for sharing
+- **So that I can** communicate findings with my team
+- **Acceptance criteria:**
+  - Export generates high-resolution PNG screenshot
+  - Export includes all key metrics and visualizations
+  - File naming includes timestamp and script identifier
+  - Export completes within 5 seconds
+
+**ST-303: Access historical analysis data**
+- **As a** developer
+- **I want** to view previous analysis results
+- **So that I can** track optimization progress over time
+- **Acceptance criteria:**
+  - Historical data stored locally with script identification
+  - Previous analyses accessible through dashboard navigation
+  - Data includes full metrics and metadata for each run
+  - Storage limited to prevent excessive disk usage
+
+### 6.4 Security and error handling
+
+**ST-401: Execute scripts in secure sandbox**
+- **As a** developer
+- **I want** my scripts to run in a secure environment
+- **So that I can** analyze code safely without system risks
+- **Acceptance criteria:**
+  - Script execution isolated from host system
+  - File system access restricted to designated temporary directory
+  - Network access disabled during script execution
+  - Process termination does not affect host system stability
+
+**ST-402: Handle script execution errors**
+- **As a** developer
+- **I want** clear error messages when script execution fails
+- **So that I can** understand and resolve issues
+- **Acceptance criteria:**
+  - Syntax errors display with line numbers and descriptions
+  - Runtime errors show stack traces and failure points
+  - Timeout errors provide clear resource limit information
+  - Error recovery allows immediate retry without restart
+
+**ST-403: Manage resource limits**
+- **As a** developer
+- **I want** protection against resource-intensive scripts
+- **So that** my system remains responsive during analysis
+- **Acceptance criteria:**
+  - Configurable limits for CPU usage, memory consumption, and execution time
+  - Automatic script termination when limits exceeded
+  - Clear warnings before termination with option to extend limits
+  - System resource monitoring to prevent host system impact
+
+### 6.5 Configuration and customization
+
+**ST-501: Configure emission factors**
+- **As a** developer
+- **I want** to customize CO₂ emission factors
+- **So that I can** use region-specific or updated emission data
+- **Acceptance criteria:**
+  - Settings panel allows emission factor modification
+  - Common regional factors provided as presets
+  - Custom factor validation ensures reasonable ranges
+  - Changes apply to all future analyses
+
+**ST-502: Set analysis preferences**
+- **As a** developer
+- **I want** to customize analysis and display preferences
+- **So that I can** tailor the tool to my specific needs
+- **Acceptance criteria:**
+  - Preferences include metric units, graph types, and equivalence categories
+  - Settings persist between application sessions
+  - Default preferences restore option available
+  - Changes apply immediately without restart
+
+## 7. Technical requirements / Stack
+
+### 7.1 Core technology stack
+- **Backend runtime**: Node.js (v16 or higher)
+- **Frontend framework**: React (v18+)
+- **Build system**: Vite or Create React App
+- **Styling**: Tailwind CSS or styled-components
+- **Charts and visualization**: Recharts or D3.js
+- **Process management**: Child process spawning with resource monitoring
+- **Data storage**: Local file system (JSON) for historical data
+
+### 7.2 System monitoring libraries
+- **CPU monitoring**: `pidusage` or native OS APIs
+- **Memory tracking**: Node.js `process.memoryUsage()`
+- **Execution timing**: High-resolution timers (`process.hrtime()`)
+- **Resource limiting**: `ulimit` or Windows equivalent
+
+### 7.3 Sandboxing and security
+- **Process isolation**: Separate Node.js processes with restricted permissions
+- **File system isolation**: Temporary directories with limited scope
+- **Network isolation**: Disabled network interfaces for executed scripts
+- **Resource monitoring**: Real-time tracking with automatic termination
+
+### 7.4 Performance requirements
+- **Analysis completion**: Under 60 seconds for typical scripts
+- **Dashboard load time**: Under 3 seconds from analysis completion
+- **Memory overhead**: Less than 100MB additional RAM usage
+- **Storage footprint**: Under 50MB for application and dependencies
+
+### 7.5 Compatibility requirements
+- **Operating systems**: Windows 10+, macOS 10.15+, Ubuntu 18.04+
+- **Node.js versions**: 16.x, 18.x, 20.x
+- **Browser compatibility**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- **Hardware requirements**: Minimum 4GB RAM, dual-core processor
+
+### 7.6 Development and deployment
+- **Package management**: npm or yarn
+- **Testing framework**: Jest for unit tests, Playwright for integration tests
+- **Code quality**: ESLint, Prettier, TypeScript (optional)
+- **Documentation**: JSDoc for API documentation
+- **Distribution**: Standalone executable with packaged dependencies
+
+## 8. Design and user interface
+
+### 8.1 Design principles
+- **Clarity first**: Information hierarchy prioritizes most important metrics
+- **Environmental theming**: Green color palette with earth-tone accents
+- **Accessibility**: WCAG 2.1 AA compliance with proper contrast and screen reader support
+- **Responsive design**: Optimized for desktop with mobile-friendly fallbacks
+- **Performance-focused**: Minimal loading states with progressive enhancement
+
+### 8.2 Layout structure
+- **Header section**: Tool branding, current script name, and analysis timestamp
+- **Metrics overview**: Prominent cards showing key environmental impact numbers
+- **Visualization area**: Interactive charts and graphs for detailed analysis
+- **Comparison panel**: Side-by-side comparison tools and historical data access
+- **Action buttons**: Export, re-run, and configuration access
+
+### 8.3 Color scheme and visual elements
+- **Primary colors**: Deep green (#2D5A27), forest green (#4A7C59)
+- **Accent colors**: Bright green (#7CB342) for positive metrics, amber (#FFC107) for warnings
+- **Background**: Clean white (#FFFFFF) with subtle gray (#F5F5F5) sections
+- **Text**: Charcoal (#333333) for primary text, gray (#666666) for secondary text
+
+### 8.4 Typography and iconography
+- **Primary font**: Inter or system font stack for optimal readability
+- **Heading hierarchy**: Clear distinction between H1, H2, and H3 elements
+- **Icon library**: Lucide React or Heroicons for consistent visual language
+- **Environmental icons**: Leaf, lightning bolt, globe symbols for thematic consistency
+
+### 8.5 Interactive elements
+- **Buttons**: Rounded corners with subtle shadows and hover animations
+- **Cards**: Elevated design with hover effects for interactive elements
+- **Charts**: Smooth animations and transitions with interactive tooltips
+- **Forms**: Clean input fields with clear validation states and feedback
+
+### 8.6 Mobile and responsive considerations
+- **Breakpoints**: Desktop-first design with tablet (768px) and mobile (480px) breakpoints
+- **Navigation**: Collapsible sidebar for smaller screens
+- **Charts**: Simplified visualizations on mobile with touch-friendly interactions
+- **Performance**: Optimized images and lazy loading for mobile data consideration
+
+### 8.7 Accessibility features
+- **Keyboard navigation**: Full functionality accessible via keyboard
+- **Screen reader support**: Proper ARIA labels and semantic HTML structure
+- **Color contrast**: Minimum 4.5:1 contrast ratio for all text elements
+- **Focus indicators**: Clear visual focus states for all interactive elements
+- **Alternative text**: Descriptive alt text for all images and charts
